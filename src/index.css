@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: better defaults */
+:root { color-scheme: dark; }
+html, body { height: 100%; }
