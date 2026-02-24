@@ -248,9 +248,12 @@ export default function DirectoryPage() {
               .filter(Boolean);
 
             return (
-              <article
+              <a
                 key={t.id}
-                className="rounded-2xl border border-neutral-800/80 bg-neutral-900/80 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-all hover:-translate-y-0.5 hover:border-neutral-600"
+                href={t.website_url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="block rounded-2xl border border-neutral-800/80 bg-neutral-900/80 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-all hover:-translate-y-0.5 hover:border-neutral-600"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
@@ -296,16 +299,11 @@ export default function DirectoryPage() {
                   <span className="text-xs text-neutral-500">
                     Added {new Date(t.date_added).toLocaleDateString()}
                   </span>
-                  <a
-                    href={t.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="text-sm font-medium text-white underline decoration-neutral-700 hover:decoration-neutral-300"
-                  >
+                  <span className="text-sm font-medium text-white underline decoration-neutral-700 hover:decoration-neutral-300">
                     Visit →
-                  </a>
+                  </span>
                 </div>
-              </article>
+              </a>
             );
           })}
         </div>
@@ -399,7 +397,18 @@ export default function DirectoryPage() {
 
       <footer className="border-t border-neutral-800">
         <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-neutral-500">
-          © {new Date().getFullYear()} AiDex · v0.0.2
+          <p>© {new Date().getFullYear()} AiDex · v0.0.2</p>
+          <p className="mt-1">
+            Open-source curated AI tools directory. Repo: 
+            <a
+              href="https://github.com/Falk0nX/ai-dex"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-300 underline decoration-neutral-700 hover:decoration-neutral-300"
+            >
+              github.com/Falk0nX/ai-dex
+            </a>
+          </p>
         </div>
       </footer>
     </div>
