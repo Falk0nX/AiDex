@@ -18,26 +18,12 @@
     background-color: #09090b;
   }
 
-  .main-ambient {
-    background-color: #0a0a0d;
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
-  }
-
   @keyframes aidex-gradient-drift {
     from {
       background-position: 12% -10%, 88% -12%, 50% -30%;
     }
     to {
       background-position: 20% -4%, 80% -18%, 60% -22%;
-    }
-  }
-
-  @keyframes aidex-ambient-drift {
-    from {
-      background-position: 15% 20%, 85% 30%, 50% 100%, 0 0;
-    }
-    to {
-      background-position: 21% 14%, 79% 36%, 56% 92%, 0 0;
     }
   }
 

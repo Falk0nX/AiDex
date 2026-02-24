@@ -24,7 +24,7 @@ export default function SiteShell({ title, subtitle, children }: { title: string
         </div>
       </header>
 
-      <main className="main-ambient mx-auto max-w-6xl px-4 py-8">{children}</main>
+      <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
 
       <footer className="mt-10 border-t border-neutral-800">
         <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-neutral-500">
