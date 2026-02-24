@@ -157,8 +157,8 @@ export default function DirectoryPage() {
   };
 
   return (
-    <div className="gradient-dot-hero min-h-screen text-neutral-50">
-      <header className="border-b border-neutral-800/80 backdrop-blur">
+    <div className="min-h-screen bg-neutral-950 text-neutral-50">
+      <header className="gradient-dot-hero border-b border-neutral-800/80 backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
