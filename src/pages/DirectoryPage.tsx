@@ -331,7 +331,16 @@ export default function DirectoryPage() {
           </button>
         </div>
 
-        <section id="submit" className="mt-12 rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+        <section className="mt-12 rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+          <h3 className="text-lg font-semibold">About AiDex</h3>
+          <p className="mt-1 text-sm text-neutral-300">
+            AiDex is a curated AI tools directory for discovering chat assistants, image generation platforms,
+            voice AI, coding tools, and foundation models. Browse by category, pricing, and open-source status
+            to quickly find the right tool for your workflow.
+          </p>
+        </section>
+
+        <section id="submit" className="mt-6 rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
           <h3 className="text-lg font-semibold">Submit a tool</h3>
           <p className="mt-1 text-sm text-neutral-300">
             Submissions go into a review queue (admin approval).
