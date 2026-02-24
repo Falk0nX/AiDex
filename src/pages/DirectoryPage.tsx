@@ -307,7 +307,7 @@ export default function DirectoryPage() {
                   </div>
                   <span
                     className={classNames(
-                      "shrink-0 rounded-full border px-2 py-1 text-xs",
+                      "shrink-0 rounded-[9px] border px-2 py-1 text-xs",
                       t.pricing === "Free" && "border-emerald-700/50 text-emerald-300",
                       t.pricing === "Paid" && "border-amber-700/50 text-amber-300",
                       t.pricing === "Freemium" && "border-sky-700/50 text-sky-300",
@@ -319,13 +319,13 @@ export default function DirectoryPage() {
                 </div>
 
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-300">
+                  <span className="rounded-[9px] border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-300">
                     {t.category}
                   </span>
                   {tagsList.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-400"
+                      className="rounded-[9px] border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-400"
                     >
                       #{tag}
                     </span>
@@ -336,32 +336,23 @@ export default function DirectoryPage() {
                   <span className="text-xs text-neutral-500">
                     Added {new Date(t.date_added).toLocaleDateString()}
                   </span>
-                  <span className="rounded-full border border-cyan-900/70 bg-cyan-950/40 px-2 py-1 text-[11px] text-cyan-300">
+                  <span className="rounded-[9px] border border-cyan-900/70 bg-cyan-950/40 px-2 py-1 text-[11px] text-cyan-300">
                     Score {getAiDexScore(t)}
                   </span>
-                  <a
-                    href={t.website_url}
-                    onClick={(e) => e.stopPropagation()}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="text-sm font-medium text-white underline decoration-neutral-700 hover:decoration-neutral-300"
-                  >
-                    Visit →
-                  </a>
                 </div>
 
                 <div className="mt-3 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
                   <button
                     type="button"
                     onClick={() => onVote(t.id, "up")}
-                    className="rounded-md border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500"
+                    className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500"
                   >
                     👍 {t.upvotes ?? 0}
                   </button>
                   <button
                     type="button"
                     onClick={() => onVote(t.id, "down")}
-                    className="rounded-md border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-rose-500"
+                    className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-rose-500"
                   >
                     👎 {t.downvotes ?? 0}
                   </button>
