@@ -33,6 +33,7 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<number | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
 
   const load = async () => {
     setError(null);
@@ -105,6 +106,34 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const buildRewritePrompt = (t: ReviewTool) => {
+    return [
+      `Rewrite AiDex tool copy for:\n`,
+      `Tool: ${t.name}`,
+      `Website: ${t.website_url}`,
+      `Current category: ${t.category}`,
+      `Current pricing: ${t.pricing}`,
+      `Current tags: ${t.tags || '(none)'}`,
+      `Current description: ${t.description}`,
+      '',
+      'Please return:',
+      '1) Better short description (max 220 chars)',
+      '2) Suggested category',
+      '3) Suggested tags (comma-separated, max 8)',
+      '4) Any note if pricing/category should change',
+    ].join('\n');
+  };
+
+  const sendToTrujilloClaw = async (t: ReviewTool) => {
+    try {
+      const prompt = buildRewritePrompt(t);
+      await navigator.clipboard.writeText(prompt);
+      setInfo(`Copied rewrite prompt for ${t.name}. Paste it in chat and I’ll rewrite it.`);
+    } catch {
+      setInfo('Could not copy automatically. Please copy manually from the tool card notes.');
+    }
+  };
+
   const logout = async () => {
     await apiPost('/api/admin_logout.php', {});
     nav('/admin/login');
@@ -122,6 +151,7 @@ export default function AdminDashboardPage() {
 
         {loading && <p className="text-sm text-neutral-400">Loading…</p>}
         {error && <p className="mb-3 text-sm text-red-300">{error}</p>}
+        {info && <p className="mb-3 text-sm text-emerald-300">{info}</p>}
 
         <section className="mb-6 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
           <h2 className="text-lg font-semibold">Pending submissions</h2>
@@ -204,6 +234,12 @@ export default function AdminDashboardPage() {
                 />
 
                 <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    onClick={() => sendToTrujilloClaw(t)}
+                    className="rounded-lg border border-fuchsia-500/40 bg-fuchsia-900/30 px-3 py-2 text-sm text-fuchsia-200"
+                  >
+                    Send to TrujilloClaw
+                  </button>
                   <button
                     onClick={() => saveCopy(t)}
                     disabled={savingId === t.id}
