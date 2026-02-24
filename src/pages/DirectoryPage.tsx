@@ -469,7 +469,7 @@ export default function DirectoryPage() {
 
       <footer className="border-t border-neutral-800">
         <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-neutral-500">
-          <p>© {new Date().getFullYear()} AiDex · v0.0.2</p>
+          <p>© {new Date().getFullYear()} AiDex · v0.1.2</p>
           <p className="mt-1">
             Open-source curated AI tools directory. Repo: 
             <a
