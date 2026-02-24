@@ -52,6 +52,7 @@ export default function DirectoryPage() {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [submitPricing, setSubmitPricing] = useState<Pricing>("Free");
   const [submitCategory, setSubmitCategory] = useState("AI Education");
+  const [customCategory, setCustomCategory] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [submitState, setSubmitState] = useState<"idle" | "sending">("idle");
@@ -76,6 +77,11 @@ export default function DirectoryPage() {
     tools.forEach((t) => set.add(t.category));
     return ["All", ...Array.from(set).sort((a, b) => a.localeCompare(b))];
   }, [tools]);
+
+  const submitCategoryOptions = useMemo(() => {
+    const options = categories.filter((c) => c !== "All");
+    return options.length ? options : ["AI Education"];
+  }, [categories]);
 
   useEffect(() => {
     setPage(1);
@@ -120,12 +126,19 @@ export default function DirectoryPage() {
     setSubmitMessage(null);
     setSubmitState("sending");
 
+    const finalCategory = submitCategory === "Other" ? customCategory.trim() : submitCategory;
+    if (!finalCategory) {
+      setSubmitMessage("Please add a custom category.");
+      setSubmitState("idle");
+      return;
+    }
+
     try {
       await apiPost("/api/submit.php", {
         name,
         website_url: websiteUrl,
         description,
-        category: submitCategory,
+        category: finalCategory,
         pricing: submitPricing,
         tags,
       });
@@ -134,6 +147,8 @@ export default function DirectoryPage() {
       setWebsiteUrl("");
       setDescription("");
       setTags("");
+      setSubmitCategory(submitCategoryOptions[0] ?? "AI Education");
+      setCustomCategory("");
       setIsSubmitOpen(false);
     } catch (err: any) {
       setSubmitMessage(err.message || "Submission failed");
@@ -438,12 +453,23 @@ export default function DirectoryPage() {
                   <option>Paid</option>
                   <option>Open Source</option>
                 </select>
-                <input
+                <select
                   value={submitCategory}
                   onChange={(e) => setSubmitCategory(e.target.value)}
-                  className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                  placeholder="Category"
-                  required
+                  className="md:col-span-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                >
+                  {submitCategoryOptions.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
+                <input
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  className="md:col-span-1 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600 disabled:opacity-50"
+                  placeholder="New category"
+                  disabled={submitCategory !== "Other"}
+                  required={submitCategory === "Other"}
                 />
                 <input
                   value={tags}
