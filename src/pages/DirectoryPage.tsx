@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../lib/api";
 
 type Pricing = "Free" | "Paid" | "Freemium" | "Open Source";
@@ -12,6 +13,8 @@ type Tool = {
   tags: string;
   pricing: Pricing;
   is_open_source: boolean;
+  upvotes?: number;
+  downvotes?: number;
   date_added: string;
 };
 
@@ -29,6 +32,7 @@ function faviconFromUrl(url: string) {
 }
 
 export default function DirectoryPage() {
+  const navigate = useNavigate();
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -130,6 +134,23 @@ export default function DirectoryPage() {
       setSubmitMessage(err.message || "Submission failed");
     } finally {
       setSubmitState("idle");
+    }
+  };
+
+  const onVote = async (toolId: number, vote: "up" | "down") => {
+    try {
+      const res = await apiPost<{ ok: true; tool_id: number; upvotes: number; downvotes: number }>("/api/vote.php", {
+        tool_id: toolId,
+        vote,
+      });
+
+      setTools((prev) =>
+        prev.map((t) =>
+          t.id === toolId ? { ...t, upvotes: res.upvotes, downvotes: res.downvotes } : t
+        )
+      );
+    } catch {
+      // no-op for now
     }
   };
 
@@ -256,12 +277,10 @@ export default function DirectoryPage() {
               .filter(Boolean);
 
             return (
-              <a
+              <article
                 key={t.id}
-                href={t.website_url}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="block rounded-2xl border border-neutral-800/80 bg-neutral-900/80 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-all hover:-translate-y-0.5 hover:border-neutral-600"
+                onClick={() => navigate(`/tool/${t.id}`)}
+                className="cursor-pointer rounded-2xl border border-neutral-800/80 bg-neutral-900/80 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-all hover:-translate-y-0.5 hover:border-neutral-600"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
@@ -307,11 +326,34 @@ export default function DirectoryPage() {
                   <span className="text-xs text-neutral-500">
                     Added {new Date(t.date_added).toLocaleDateString()}
                   </span>
-                  <span className="text-sm font-medium text-white underline decoration-neutral-700 hover:decoration-neutral-300">
+                  <a
+                    href={t.website_url}
+                    onClick={(e) => e.stopPropagation()}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="text-sm font-medium text-white underline decoration-neutral-700 hover:decoration-neutral-300"
+                  >
                     Visit →
-                  </span>
+                  </a>
                 </div>
-              </a>
+
+                <div className="mt-3 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    type="button"
+                    onClick={() => onVote(t.id, "up")}
+                    className="rounded-md border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500"
+                  >
+                    👍 {t.upvotes ?? 0}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onVote(t.id, "down")}
+                    className="rounded-md border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-rose-500"
+                  >
+                    👎 {t.downvotes ?? 0}
+                  </button>
+                </div>
+              </article>
             );
           })}
         </div>

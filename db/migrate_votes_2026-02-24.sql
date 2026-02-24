@@ -1,0 +1,17 @@
+ALTER TABLE tools
+  ADD COLUMN IF NOT EXISTS upvotes INT NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS downvotes INT NOT NULL DEFAULT 0;
+
+CREATE TABLE IF NOT EXISTS tool_votes (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  tool_id INT NOT NULL,
+  voter_fingerprint CHAR(64) NOT NULL,
+  vote_value TINYINT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_tool_voter (tool_id, voter_fingerprint),
+  INDEX idx_tool_id (tool_id),
+  CONSTRAINT fk_tool_votes_tool FOREIGN KEY (tool_id)
+    REFERENCES tools(id) ON DELETE CASCADE,
+  CONSTRAINT chk_vote_value CHECK (vote_value IN (-1, 1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
