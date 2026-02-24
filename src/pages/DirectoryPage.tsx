@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../lib/api";
+import { getAiDexScore } from "../lib/scoring";
 
 type Pricing = "Free" | "Paid" | "Freemium" | "Open Source";
 
@@ -41,7 +42,7 @@ export default function DirectoryPage() {
   const [category, setCategory] = useState<string>("All");
   const [pricing, setPricing] = useState<"All" | Pricing>("All");
   const [openSourceOnly, setOpenSourceOnly] = useState(false);
-  const [sort, setSort] = useState<"newest" | "name">("newest");
+  const [sort, setSort] = useState<"newest" | "name" | "score">("newest");
 
   const [page, setPage] = useState(1);
   const pageSize = 24;
@@ -102,6 +103,7 @@ export default function DirectoryPage() {
 
     list.sort((a, b) => {
       if (sort === "name") return a.name.localeCompare(b.name);
+      if (sort === "score") return getAiDexScore(b) - getAiDexScore(a);
       return new Date(b.date_added).getTime() - new Date(a.date_added).getTime();
     });
 
@@ -183,12 +185,26 @@ export default function DirectoryPage() {
               </div>
             </div>
 
-            <a
-              href="#submit"
-              className="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
-            >
-              Submit a tool
-            </a>
+            <div className="flex flex-wrap items-center gap-2">
+              <Link
+                to="/leaderboard"
+                className="inline-flex items-center justify-center rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-100 hover:border-neutral-500"
+              >
+                Leaderboard
+              </Link>
+              <Link
+                to="/compare"
+                className="inline-flex items-center justify-center rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-100 hover:border-neutral-500"
+              >
+                Compare
+              </Link>
+              <a
+                href="#submit"
+                className="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
+              >
+                Submit a tool
+              </a>
+            </div>
           </div>
 
           <div className="mt-6 grid gap-3 md:grid-cols-12">
@@ -241,6 +257,7 @@ export default function DirectoryPage() {
               >
                 <option value="newest">Newest</option>
                 <option value="name">Name</option>
+                <option value="score">AiDex Score</option>
               </select>
             </div>
 
@@ -325,6 +342,9 @@ export default function DirectoryPage() {
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-xs text-neutral-500">
                     Added {new Date(t.date_added).toLocaleDateString()}
+                  </span>
+                  <span className="rounded-full border border-cyan-900/70 bg-cyan-950/40 px-2 py-1 text-[11px] text-cyan-300">
+                    Score {getAiDexScore(t)}
                   </span>
                   <a
                     href={t.website_url}

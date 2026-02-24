@@ -11,6 +11,8 @@ $rows = $pdo->query('SELECT id, date_added FROM tools ORDER BY date_added DESC, 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 echo '  <url><loc>' . $base . '/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>' . "\n";
+echo '  <url><loc>' . $base . '/leaderboard</loc><changefreq>daily</changefreq><priority>0.9</priority></url>' . "\n";
+echo '  <url><loc>' . $base . '/compare</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>' . "\n";
 
 foreach ($rows as $r) {
   $id = (int)$r['id'];

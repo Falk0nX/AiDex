@@ -46,6 +46,39 @@ export default function ToolPage() {
     const desc = `Explore ${tool.name} on AiDex. ${tool.description}`;
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", desc);
+
+    const existing = document.getElementById("aidex-tool-schema");
+    if (existing) existing.remove();
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "aidex-tool-schema";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: tool.name,
+      description: tool.description,
+      applicationCategory: tool.category,
+      operatingSystem: "Web",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        category: tool.pricing,
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: Math.max(1, (tool.upvotes ?? 0) - (tool.downvotes ?? 0) + 1),
+        ratingCount: (tool.upvotes ?? 0) + (tool.downvotes ?? 0),
+      },
+      url: tool.website_url,
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      const s = document.getElementById("aidex-tool-schema");
+      if (s) s.remove();
+    };
   }, [tool]);
 
   const tagsList = useMemo(
@@ -72,7 +105,7 @@ export default function ToolPage() {
             ))}
           </div>
 
-          <div className="mt-6 flex items-center gap-4">
+          <div className="mt-6 flex flex-wrap items-center gap-4">
             <a
               href={tool.website_url}
               target="_blank"
@@ -81,6 +114,12 @@ export default function ToolPage() {
             >
               Visit Website →
             </a>
+            <Link
+              to={`/compare?a=${tool.id}`}
+              className="inline-flex items-center rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-100 hover:border-neutral-500"
+            >
+              Compare this tool
+            </Link>
             <span className="text-sm text-neutral-400">
               👍 {tool.upvotes ?? 0} · 👎 {tool.downvotes ?? 0}
             </span>
