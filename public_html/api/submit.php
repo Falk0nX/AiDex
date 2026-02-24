@@ -47,27 +47,59 @@ if ($tgToken !== '' && $tgChatId !== '') {
       . "Tags: " . ($data['tags'] !== '' ? $data['tags'] : 'none');
 
     $apiUrl = "https://api.telegram.org/bot{$tgToken}/sendMessage";
-    $payload = http_build_query([
+    $payloadArr = [
       'chat_id' => $tgChatId,
       'text' => $msg,
       'disable_web_page_preview' => true,
-    ]);
+    ];
+    $payload = http_build_query($payloadArr);
 
-    $ctx = stream_context_create([
-      'http' => [
-        'method' => 'POST',
-        'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
-        'content' => $payload,
-        'timeout' => 2,
-      ],
-      'ssl' => [
-        'verify_peer' => true,
-        'verify_peer_name' => true,
-      ],
-    ]);
-    @file_get_contents($apiUrl, false, $ctx);
+    $response = false;
+
+    // Prefer cURL when available (more reliable on shared hosting)
+    if (function_exists('curl_init')) {
+      $ch = curl_init($apiUrl);
+      curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 2,
+        CURLOPT_TIMEOUT => 4,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
+      ]);
+      $response = curl_exec($ch);
+      if ($response === false) {
+        error_log('AiDex TG notify curl error: ' . curl_error($ch));
+      }
+      curl_close($ch);
+    } else {
+      $ctx = stream_context_create([
+        'http' => [
+          'method' => 'POST',
+          'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+          'content' => $payload,
+          'timeout' => 4,
+        ],
+        'ssl' => [
+          'verify_peer' => true,
+          'verify_peer_name' => true,
+        ],
+      ]);
+      $response = @file_get_contents($apiUrl, false, $ctx);
+      if ($response === false) {
+        error_log('AiDex TG notify failed via file_get_contents');
+      }
+    }
+
+    if (is_string($response) && $response !== '') {
+      $decoded = json_decode($response, true);
+      if (!is_array($decoded) || empty($decoded['ok'])) {
+        error_log('AiDex TG notify API non-ok response: ' . substr($response, 0, 300));
+      }
+    }
   } catch (Throwable $e) {
-    // swallow notification failures so submission flow is never blocked
+    error_log('AiDex TG notify exception: ' . $e->getMessage());
+    // never block submission flow
   }
 }
 
