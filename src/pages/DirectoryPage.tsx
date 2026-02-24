@@ -167,15 +167,17 @@ export default function DirectoryPage() {
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 Curated AI Tools Directory
               </div>
-              <Link to="/" className="mt-3 inline-flex items-center gap-3 hover:opacity-90">
-                <img
-                  src="/aidex-logo-square.jpg"
-                  alt="AiDex logo"
-                  className="h-10 w-10 rounded-md border border-neutral-800 object-cover"
-                  loading="eager"
-                />
-                <h1 className="text-3xl font-semibold tracking-tight">AiDex</h1>
-              </Link>
+              <div className="mt-3 flex items-center gap-3">
+                <Link to="/" className="flex items-center gap-3 hover:opacity-90">
+                  <img
+                    src="/aidex-logo-square.jpg"
+                    alt="AiDex logo"
+                    className="h-10 w-10 rounded-md border border-neutral-800 object-cover"
+                    loading="eager"
+                  />
+                  <h1 className="text-3xl font-semibold tracking-tight">AiDex</h1>
+                </Link>
+              </div>
               <p className="mt-2 max-w-2xl text-sm text-neutral-300">
                 Discover AI tools, filter by category/pricing, and submit new tools for review.
               </p>
