@@ -19,6 +19,15 @@ function classNames(...xs: Array<string | false | undefined>) {
   return xs.filter(Boolean).join(" ");
 }
 
+function faviconFromUrl(url: string) {
+  try {
+    const host = new URL(url).hostname;
+    return `https://www.google.com/s2/favicons?domain=${host}&sz=64`;
+  } catch {
+    return "";
+  }
+}
+
 export default function DirectoryPage() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,19 +134,24 @@ export default function DirectoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-50">
-      <header className="border-b border-neutral-800">
+    <div className="min-h-screen bg-neutral-950 text-neutral-50 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.14),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(168,85,247,0.12),transparent_30%)]">
+      <header className="border-b border-neutral-800/80 backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1 text-xs text-neutral-300">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                Curated AI Tools Directory (no AI APIs)
+                Curated AI Tools Directory
               </div>
               <h1 className="mt-3 text-3xl font-semibold tracking-tight">AiDex</h1>
               <p className="mt-2 max-w-2xl text-sm text-neutral-300">
                 Discover AI tools, filter by category/pricing, and submit new tools for review.
               </p>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs text-neutral-300">
+                <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{tools.length} tools</span>
+                <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{categories.length - 1} categories</span>
+                <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">Community curated</span>
+              </div>
             </div>
 
             <a
@@ -236,12 +250,20 @@ export default function DirectoryPage() {
             return (
               <article
                 key={t.id}
-                className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-neutral-700"
+                className="rounded-2xl border border-neutral-800/80 bg-neutral-900/80 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-all hover:-translate-y-0.5 hover:border-neutral-600"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h2 className="text-base font-semibold">{t.name}</h2>
-                    <p className="mt-1 text-sm text-neutral-300 line-clamp-3">{t.description}</p>
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={faviconFromUrl(t.website_url)}
+                      alt=""
+                      className="mt-0.5 h-9 w-9 rounded-md border border-neutral-700 bg-neutral-800 p-1"
+                      loading="lazy"
+                    />
+                    <div>
+                      <h2 className="text-base font-semibold">{t.name}</h2>
+                      <p className="mt-1 text-sm text-neutral-300 line-clamp-3">{t.description}</p>
+                    </div>
                   </div>
                   <span
                     className={classNames(
@@ -367,7 +389,7 @@ export default function DirectoryPage() {
               disabled={submitState === "sending"}
               className="md:col-span-3 rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 disabled:opacity-50"
             >
-              {submitState === "sending" ? "Submitting…" : "Submit (wire to API next)"}
+              {submitState === "sending" ? "Submitting…" : "Submit for review"}
             </button>
           </form>
 
@@ -377,7 +399,7 @@ export default function DirectoryPage() {
 
       <footer className="border-t border-neutral-800">
         <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-neutral-500">
-          © {new Date().getFullYear()} AiDex — Directory only, no AI compute.
+          © {new Date().getFullYear()} AiDex
         </div>
       </footer>
     </div>
