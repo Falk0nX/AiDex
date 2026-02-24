@@ -57,6 +57,7 @@ export default function DirectoryPage() {
   const [tags, setTags] = useState("");
   const [submitState, setSubmitState] = useState<"idle" | "sending">("idle");
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const [flashMessage, setFlashMessage] = useState<string | null>(null);
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
   const [submitStep, setSubmitStep] = useState<1 | 2>(1);
   const [autofillState, setAutofillState] = useState<"idle" | "loading">("idle");
@@ -186,6 +187,7 @@ export default function DirectoryPage() {
         tags,
       });
       setSubmitMessage("Submission received and pending review.");
+      setFlashMessage("✅ Thanks — your tool was submitted successfully and is pending review.");
       setName("");
       setWebsiteUrl("");
       setDescription("");
@@ -342,6 +344,12 @@ export default function DirectoryPage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
+        {flashMessage && (
+          <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-emerald-700/40 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-200">
+            <span>{flashMessage}</span>
+            <button type="button" onClick={() => setFlashMessage(null)} className="rounded-md border border-emerald-700/40 px-2 py-1 text-xs hover:bg-emerald-900/40">Dismiss</button>
+          </div>
+        )}
         {loading && <p className="text-sm text-neutral-400">Loading tools…</p>}
         {error && <p className="mb-4 text-sm text-red-300">{error}</p>}
 

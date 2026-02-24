@@ -59,12 +59,21 @@ if ($tgToken !== '' && $tgChatId !== '') {
     if ($actionSecret !== '' && $submissionId > 0) {
       $sigApprove = substr(hash_hmac('sha256', "approve:{$submissionId}", $actionSecret), 0, 12);
       $sigReject = substr(hash_hmac('sha256', "reject:{$submissionId}", $actionSecret), 0, 12);
-      $payloadArr['reply_markup'] = json_encode([
-        'inline_keyboard' => [[
-          ['text' => '✅ Approve', 'callback_data' => "approve:{$submissionId}:{$sigApprove}"],
-          ['text' => '❌ Reject', 'callback_data' => "reject:{$submissionId}:{$sigReject}"],
-        ]],
-      ], JSON_UNESCAPED_UNICODE);
+
+      $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+      $host = (string)($_SERVER['HTTP_HOST'] ?? '');
+      $base = $host !== '' ? "{$scheme}://{$host}" : '';
+
+      if ($base !== '') {
+        $approveUrl = $base . '/api/tg_action.php?action=approve&id=' . $submissionId . '&sig=' . $sigApprove;
+        $rejectUrl = $base . '/api/tg_action.php?action=reject&id=' . $submissionId . '&sig=' . $sigReject;
+        $payloadArr['reply_markup'] = json_encode([
+          'inline_keyboard' => [[
+            ['text' => '✅ Approve', 'url' => $approveUrl],
+            ['text' => '❌ Reject', 'url' => $rejectUrl],
+          ]],
+        ], JSON_UNESCAPED_UNICODE);
+      }
     }
 
     $payload = http_build_query($payloadArr);
