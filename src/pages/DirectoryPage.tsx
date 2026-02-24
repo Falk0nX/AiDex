@@ -524,7 +524,7 @@ export default function DirectoryPage() {
                         onClick={onAutofillFromWebsite}
                         className="gradient-btn disabled:opacity-50"
                       >
-                        <span>{autofillState === "loading" ? "Auto-filling…" : "Next: Auto-fill details"}</span>
+                        <span>{autofillState === "loading" ? "Auto-filling…" : "Next"}</span>
                       </button>
                     </div>
                   </>

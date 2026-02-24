@@ -27,22 +27,75 @@ if ($resolvedIp !== $host) {
   }
 }
 
-$ctx = stream_context_create([
-  'http' => [
-    'timeout' => 6,
-    'follow_location' => 1,
-    'max_redirects' => 3,
-    'user_agent' => 'AiDexBot/1.0 (+https://aidex.online)',
-  ],
-  'ssl' => [
-    'verify_peer' => true,
-    'verify_peer_name' => true,
-  ],
-]);
+$urlsToTry = [$url];
+$hostNoWww = preg_replace('/^www\./i', '', $host) ?: $host;
+if (!str_starts_with(strtolower($host), 'www.')) {
+  $urlsToTry[] = preg_replace('#^https?://#i', $scheme . '://www.', $url);
+}
+$urlsToTry[] = $scheme . '://' . $hostNoWww;
+$urlsToTry[] = $scheme . '://www.' . $hostNoWww;
+$urlsToTry = array_values(array_unique(array_filter($urlsToTry)));
 
-$html = @file_get_contents($url, false, $ctx);
-if ($html === false) json_error('Could not read website metadata');
-$html = mb_substr($html, 0, 350000);
+$html = false;
+$lastErr = '';
+
+foreach ($urlsToTry as $tryUrl) {
+  if (function_exists('curl_init')) {
+    $ch = curl_init($tryUrl);
+    curl_setopt_array($ch, [
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_MAXREDIRS => 5,
+      CURLOPT_CONNECTTIMEOUT => 4,
+      CURLOPT_TIMEOUT => 8,
+      CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123 Safari/537.36',
+      CURLOPT_HTTPHEADER => [
+        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language: en-US,en;q=0.9',
+      ],
+      CURLOPT_SSL_VERIFYPEER => true,
+      CURLOPT_SSL_VERIFYHOST => 2,
+    ]);
+    $res = curl_exec($ch);
+    $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    if ($res !== false && $code >= 200 && $code < 400) {
+      $html = $res;
+      curl_close($ch);
+      break;
+    }
+    $lastErr = 'curl ' . $code . ' ' . curl_error($ch);
+    curl_close($ch);
+  }
+
+  if ($html === false) {
+    $ctx = stream_context_create([
+      'http' => [
+        'timeout' => 8,
+        'follow_location' => 1,
+        'max_redirects' => 5,
+        'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123 Safari/537.36',
+        'header' => "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Language: en-US,en;q=0.9\r\n",
+      ],
+      'ssl' => [
+        'verify_peer' => true,
+        'verify_peer_name' => true,
+      ],
+    ]);
+    $res = @file_get_contents($tryUrl, false, $ctx);
+    if ($res !== false) {
+      $html = $res;
+      break;
+    }
+    $lastErr = 'file_get_contents failed';
+  }
+}
+
+if ($html === false) {
+  error_log('AiDex enrich_tool fetch failed for ' . $url . ' (' . $lastErr . ')');
+  json_error('Could not read website metadata');
+}
+
+$html = mb_substr((string)$html, 0, 350000);
 
 libxml_use_internal_errors(true);
 $doc = new DOMDocument();
