@@ -52,7 +52,7 @@ try {
       tg_html("Submission #{$id} was already reviewed.", true);
     }
 
-    $ins = $pdo->prepare('INSERT INTO tools (name, website_url, description, category, pricing, tags, is_open_source, source_submission_id) VALUES (:name, :website_url, :description, :category, :pricing, :tags, :is_open_source, :source_submission_id)');
+    $ins = $pdo->prepare('INSERT INTO tools (name, website_url, description, category, pricing, tags, is_open_source, source_submission_id, needs_copy_review, copy_review_notes) VALUES (:name, :website_url, :description, :category, :pricing, :tags, :is_open_source, :source_submission_id, 1, :copy_review_notes)');
     $ins->execute([
       ':name' => $sub['name'],
       ':website_url' => $sub['website_url'],
@@ -62,6 +62,7 @@ try {
       ':tags' => $sub['tags'],
       ':is_open_source' => (int)$sub['is_open_source'],
       ':source_submission_id' => $id,
+      ':copy_review_notes' => 'Approved via Telegram: review copy quality',
     ]);
     $toolId = (int)$pdo->lastInsertId();
 

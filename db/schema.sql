@@ -43,10 +43,13 @@ CREATE TABLE IF NOT EXISTS tools (
   upvotes INT NOT NULL DEFAULT 0,
   downvotes INT NOT NULL DEFAULT 0,
   source_submission_id INT NULL UNIQUE,
+  needs_copy_review TINYINT(1) NOT NULL DEFAULT 0,
+  copy_review_notes VARCHAR(500) NULL,
   date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_date_added (date_added),
   INDEX idx_category (category),
+  INDEX idx_copy_review (needs_copy_review, date_added),
   CONSTRAINT fk_tools_submission FOREIGN KEY (source_submission_id)
     REFERENCES tool_submissions(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
