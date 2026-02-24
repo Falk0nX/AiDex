@@ -1,0 +1,21 @@
+-- Seed approved tools from legacy src/data/tools.ts
+INSERT INTO tools (name, website_url, description, category, pricing, tags, is_open_source, date_added) VALUES
+('Futurepedia','https://www.futurepedia.io/','Curated directory of AI tools across many categories.','AI Education','Free','directory,discovery',0,'2026-02-20 00:00:00'),
+('There’s An AI For That','https://theresanaiforthat.com/','Searchable catalog of AI tools and use cases.','AI Education','Free','catalog,use-cases',0,'2026-02-18 00:00:00'),
+('Ollama','https://ollama.com/','Run open-source LLMs locally (self-hosted).','Self-hosted AI','Open Source','local,models,self-hosted',1,'2026-02-10 00:00:00'),
+('Open WebUI','https://openwebui.com/','Self-hosted web UI for local/remote model backends.','Self-hosted AI','Open Source','ui,self-hosted,chat',1,'2026-02-11 00:00:00'),
+('LocalAI','https://localai.io/','Run models locally with an OpenAI-compatible API.','Self-hosted AI','Open Source','api,self-hosted',1,'2026-02-12 00:00:00'),
+('Cursor','https://www.cursor.com/','Code editor built for AI-assisted development workflows.','Coding AI','Paid','editor,pair-programming',0,'2026-02-01 00:00:00'),
+('Continue','https://www.continue.dev/','Open-source coding assistant for VS Code + JetBrains.','Coding AI','Open Source','open-source,vscode,jetbrains',1,'2026-02-02 00:00:00'),
+('Tabby','https://tabbyml.com/','Self-hosted coding assistant for teams.','Coding AI','Open Source','self-hosted,team',1,'2026-02-03 00:00:00'),
+('Notion','https://www.notion.so/','Workspace for notes, docs, tasks, and knowledge bases.','Productivity','Freemium','notes,docs',0,'2026-02-07 00:00:00'),
+('Obsidian','https://obsidian.md/','Local-first knowledge base and note-taking app.','Productivity','Freemium','notes,local-first',0,'2026-02-08 00:00:00'),
+('n8n','https://n8n.io/','Workflow automation you can self-host.','Productivity','Freemium','automation,self-hosted',1,'2026-02-23 00:00:00'),
+('ElevenLabs','https://elevenlabs.io/','High-quality voice generation platform.','Voice AI','Paid','tts,voice',0,'2026-02-09 00:00:00'),
+('Whisper (OpenAI)','https://github.com/openai/whisper','Open-source speech-to-text model widely used.','Voice AI','Open Source','stt,open-source',1,'2026-02-13 00:00:00'),
+('ComfyUI','https://github.com/comfyanonymous/ComfyUI','Node-based UI for image generation workflows.','Image Generation','Open Source','workflow,nodes',1,'2026-02-15 00:00:00'),
+('Blender','https://www.blender.org/','3D creation suite useful for AI visual pipelines.','Image Generation','Open Source','3d,render',1,'2026-02-23 00:00:00'),
+('Hugging Face','https://huggingface.co/','Hub for models, datasets, and demos.','AI Infrastructure','Freemium','models,datasets',0,'2026-02-18 00:00:00'),
+('OpenTelemetry','https://opentelemetry.io/','Vendor-neutral observability framework.','AI Infrastructure','Open Source','tracing,metrics',1,'2026-02-06 00:00:00'),
+('Perplexity','https://www.perplexity.ai/','Search-focused assistant experience.','AI Chatbots','Freemium','search,research',0,'2026-02-23 00:00:00'),
+('LM Studio','https://lmstudio.ai/','Desktop app for running local models with a friendly UI.','Self-hosted AI','Freemium','local,desktop',0,'2026-02-23 00:00:00');
