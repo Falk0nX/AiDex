@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { apiGet } from "../lib/api";
+import SiteShell from "../components/SiteShell";
 
 type Pricing = "Free" | "Paid" | "Freemium" | "Open Source";
 
@@ -81,51 +82,30 @@ export default function ToolPage() {
     };
   }, [tool]);
 
-  const tagsList = useMemo(
-    () => (tool?.tags || "").split(",").map((x) => x.trim()).filter(Boolean),
-    [tool]
-  );
+  const tagsList = useMemo(() => (tool?.tags || "").split(",").map((x) => x.trim()).filter(Boolean), [tool]);
 
-  if (loading) return <div className="min-h-screen bg-neutral-950 text-neutral-50 p-6">Loading…</div>;
-  if (error || !tool) return <div className="min-h-screen bg-neutral-950 text-red-300 p-6">{error || "Not found"}</div>;
+  if (loading) return <SiteShell title="Loading tool..." subtitle="Fetching tool details"><p className="text-sm text-neutral-400">Loading…</p></SiteShell>;
+  if (error || !tool) return <SiteShell title="Tool not found" subtitle="This listing may have moved or been removed."><p className="text-sm text-red-300">{error || "Not found"}</p></SiteShell>;
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-50">
-      <main className="mx-auto max-w-4xl px-4 py-10">
-        <Link to="/" className="text-sm text-neutral-300 hover:text-white">← Back to directory</Link>
-        <article className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-          <h1 className="text-3xl font-semibold">{tool.name}</h1>
-          <p className="mt-3 text-neutral-300">{tool.description}</p>
+    <SiteShell title={tool.name} subtitle="Tool profile on AiDex">
+      <article className="rounded-2xl border border-neutral-800 bg-neutral-900/85 p-6">
+        <p className="text-neutral-300">{tool.description}</p>
 
-          <div className="mt-4 flex flex-wrap gap-2 text-sm">
-            <span className="rounded-full border border-neutral-700 px-3 py-1">{tool.category}</span>
-            <span className="rounded-full border border-neutral-700 px-3 py-1">{tool.pricing}</span>
-            {tagsList.map((tag) => (
-              <span key={tag} className="rounded-full border border-neutral-800 bg-neutral-950 px-3 py-1 text-neutral-400">#{tag}</span>
-            ))}
-          </div>
+        <div className="mt-4 flex flex-wrap gap-2 text-sm">
+          <span className="rounded-full border border-neutral-700 px-3 py-1">{tool.category}</span>
+          <span className="rounded-full border border-neutral-700 px-3 py-1">{tool.pricing}</span>
+          {tagsList.map((tag) => (
+            <span key={tag} className="rounded-full border border-neutral-800 bg-neutral-950 px-3 py-1 text-neutral-400">#{tag}</span>
+          ))}
+        </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-4">
-            <a
-              href={tool.website_url}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="inline-flex items-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
-            >
-              Visit Website →
-            </a>
-            <Link
-              to={`/compare?a=${tool.id}`}
-              className="inline-flex items-center rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-100 hover:border-neutral-500"
-            >
-              Compare this tool
-            </Link>
-            <span className="text-sm text-neutral-400">
-              👍 {tool.upvotes ?? 0} · 👎 {tool.downvotes ?? 0}
-            </span>
-          </div>
-        </article>
-      </main>
-    </div>
+        <div className="mt-6 flex flex-wrap items-center gap-4">
+          <a href={tool.website_url} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200">Visit Website →</a>
+          <Link to={`/compare?a=${tool.id}`} className="inline-flex items-center rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-100 hover:border-neutral-500">Compare this tool</Link>
+          <span className="text-sm text-neutral-400">👍 {tool.upvotes ?? 0} · 👎 {tool.downvotes ?? 0}</span>
+        </div>
+      </article>
+    </SiteShell>
   );
 }
