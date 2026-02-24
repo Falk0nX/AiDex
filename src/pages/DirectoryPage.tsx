@@ -143,7 +143,15 @@ export default function DirectoryPage() {
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 Curated AI Tools Directory
               </div>
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight">AiDex</h1>
+              <div className="mt-3 flex items-center gap-3">
+                <img
+                  src="/aidex-logo-square.jpg"
+                  alt="AiDex logo"
+                  className="h-10 w-10 rounded-md border border-neutral-800 object-cover"
+                  loading="eager"
+                />
+                <h1 className="text-3xl font-semibold tracking-tight">AiDex</h1>
+              </div>
               <p className="mt-2 max-w-2xl text-sm text-neutral-300">
                 Discover AI tools, filter by category/pricing, and submit new tools for review.
               </p>
@@ -410,12 +418,12 @@ export default function DirectoryPage() {
           <p className="mt-1">
             Open-source curated AI tools directory. Repo: 
             <a
-              href="https://github.com/Falk0nX/ai-dex"
+              href="https://github.com/Falk0nX/AiDex"
               target="_blank"
               rel="noopener noreferrer"
               className="text-neutral-300 underline decoration-neutral-700 hover:decoration-neutral-300"
             >
-              github.com/Falk0nX/ai-dex
+              github.com/Falk0nX/AiDex
             </a>
           </p>
         </div>
