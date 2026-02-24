@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export default function SiteShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-50">
+    <div className="app-ambient min-h-screen text-neutral-50">
       <header className="gradient-dot-hero border-b border-neutral-800/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5">
           <Link to="/" className="flex items-center gap-3 hover:opacity-90">
