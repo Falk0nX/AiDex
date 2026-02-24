@@ -157,7 +157,7 @@ export default function DirectoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-50 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.14),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(168,85,247,0.12),transparent_30%)]">
+    <div className="gradient-dot-hero min-h-screen text-neutral-50">
       <header className="border-b border-neutral-800/80 backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -186,24 +186,9 @@ export default function DirectoryPage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <Link
-                to="/leaderboard"
-                className="inline-flex items-center justify-center rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-100 hover:border-neutral-500"
-              >
-                Leaderboard
-              </Link>
-              <Link
-                to="/compare"
-                className="inline-flex items-center justify-center rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-100 hover:border-neutral-500"
-              >
-                Compare
-              </Link>
-              <a
-                href="#submit"
-                className="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
-              >
-                Submit a tool
-              </a>
+              <Link to="/leaderboard" className="gradient-btn"><span>Leaderboard</span></Link>
+              <Link to="/compare" className="gradient-btn"><span>Compare</span></Link>
+              <a href="#submit" className="gradient-btn"><span>Submit a tool</span></a>
             </div>
           </div>
 
@@ -297,7 +282,12 @@ export default function DirectoryPage() {
               <article
                 key={t.id}
                 onClick={() => navigate(`/tool/${t.id}`)}
-                className="cursor-pointer rounded-2xl border border-neutral-800/80 bg-neutral-900/80 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-all hover:-translate-y-0.5 hover:border-neutral-600"
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+                  e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+                }}
+                className="glow-card cursor-pointer"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
@@ -464,9 +454,9 @@ export default function DirectoryPage() {
             />
             <button
               disabled={submitState === "sending"}
-              className="md:col-span-3 rounded-lg bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 disabled:opacity-50"
+              className="gradient-btn md:col-span-3 disabled:opacity-50"
             >
-              {submitState === "sending" ? "Submitting…" : "Submit for review"}
+              <span>{submitState === "sending" ? "Submitting…" : "Submit for review"}</span>
             </button>
           </form>
 

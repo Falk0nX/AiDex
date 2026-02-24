@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export default function SiteShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-50 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.14),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(168,85,247,0.12),transparent_30%)]">
+    <div className="gradient-dot-hero min-h-screen text-neutral-50">
       <header className="border-b border-neutral-800/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5">
           <div className="flex items-center gap-3">
@@ -15,10 +15,10 @@ export default function SiteShell({ title, subtitle, children }: { title: string
           </div>
 
           <nav className="flex flex-wrap gap-2 text-sm">
-            <Link to="/" className="rounded-lg border border-neutral-700 px-3 py-1.5 hover:border-neutral-500">Directory</Link>
-            <Link to="/leaderboard" className="rounded-lg border border-neutral-700 px-3 py-1.5 hover:border-neutral-500">Leaderboard</Link>
-            <Link to="/compare" className="rounded-lg border border-neutral-700 px-3 py-1.5 hover:border-neutral-500">Compare</Link>
-            <a href="/#submit" className="rounded-lg bg-white px-3 py-1.5 font-medium text-neutral-950 hover:bg-neutral-200">Submit</a>
+            <Link to="/" className="gradient-btn px-3 py-1.5"><span>Directory</span></Link>
+            <Link to="/leaderboard" className="gradient-btn px-3 py-1.5"><span>Leaderboard</span></Link>
+            <Link to="/compare" className="gradient-btn px-3 py-1.5"><span>Compare</span></Link>
+            <a href="/#submit" className="gradient-btn px-3 py-1.5"><span>Submit</span></a>
           </nav>
         </div>
       </header>

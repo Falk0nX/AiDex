@@ -2,6 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optional: better defaults */
+@layer components {
+  .gradient-dot-hero {
+    background-color: rgb(10 10 10);
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.22), transparent 30%),
+      radial-gradient(circle at 80% 0%, rgba(168, 85, 247, 0.2), transparent 32%),
+      radial-gradient(rgba(255, 255, 255, 0.12) 0.8px, transparent 0.8px);
+    background-size: auto, auto, 22px 22px;
+    background-position: center;
+  }
+
+  .gradient-btn {
+    @apply relative inline-flex items-center justify-center overflow-hidden rounded-xl px-4 py-2 text-sm font-semibold text-white transition-transform duration-200;
+    background: linear-gradient(120deg, #22d3ee 0%, #3b82f6 45%, #a855f7 100%);
+  }
+
+  .gradient-btn::before {
+    content: "";
+    @apply absolute inset-[1px] rounded-[11px] bg-neutral-950/85;
+  }
+
+  .gradient-btn > span {
+    @apply relative z-10;
+  }
+
+  .gradient-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25), 0 0 22px rgba(168, 85, 247, 0.2);
+  }
+
+  .glow-card {
+    @apply relative overflow-hidden rounded-2xl border border-neutral-800/80 bg-neutral-900/80 p-4 transition-all duration-300;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .glow-card::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(480px circle at var(--mx, 50%) var(--my, 50%), rgba(56, 189, 248, 0.14), transparent 40%);
+  }
+
+  .glow-card:hover {
+    @apply border-neutral-600;
+    transform: translateY(-2px);
+  }
+
+  .glow-card:hover::before {
+    @apply opacity-100;
+  }
+}
+
 :root { color-scheme: dark; }
 html, body { height: 100%; }
