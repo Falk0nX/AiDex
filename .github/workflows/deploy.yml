@@ -1,0 +1,66 @@
+name: Deploy AiDex to DreamHost
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DREAMHOST_SSH_KEY }}
+
+      - name: Add DreamHost host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$DREAMHOST_HOST" >> ~/.ssh/known_hosts
+        env:
+          DREAMHOST_HOST: ${{ secrets.DREAMHOST_HOST }}
+
+      - name: Deploy frontend dist -> public_html
+        run: |
+          rsync -avz --delete dist/ "$DREAMHOST_USER@$DREAMHOST_HOST:$DREAMHOST_PUBLIC_HTML/"
+        env:
+          DREAMHOST_HOST: ${{ secrets.DREAMHOST_HOST }}
+          DREAMHOST_USER: ${{ secrets.DREAMHOST_USER }}
+          DREAMHOST_PUBLIC_HTML: ${{ secrets.DREAMHOST_PUBLIC_HTML }}
+
+      - name: Deploy API
+        run: |
+          rsync -avz --delete public_html/api/ "$DREAMHOST_USER@$DREAMHOST_HOST:$DREAMHOST_PUBLIC_HTML/api/"
+        env:
+          DREAMHOST_HOST: ${{ secrets.DREAMHOST_HOST }}
+          DREAMHOST_USER: ${{ secrets.DREAMHOST_USER }}
+          DREAMHOST_PUBLIC_HTML: ${{ secrets.DREAMHOST_PUBLIC_HTML }}
+
+      - name: Deploy root .htaccess
+        run: |
+          rsync -avz public_html/.htaccess "$DREAMHOST_USER@$DREAMHOST_HOST:$DREAMHOST_PUBLIC_HTML/.htaccess"
+        env:
+          DREAMHOST_HOST: ${{ secrets.DREAMHOST_HOST }}
+          DREAMHOST_USER: ${{ secrets.DREAMHOST_USER }}
+          DREAMHOST_PUBLIC_HTML: ${{ secrets.DREAMHOST_PUBLIC_HTML }}
