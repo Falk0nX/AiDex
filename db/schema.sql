@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS tools (
   pricing ENUM('Free','Freemium','Paid','Open Source') NOT NULL,
   tags VARCHAR(400) NOT NULL DEFAULT '',
   is_open_source TINYINT(1) NOT NULL DEFAULT 0,
+  is_hidden TINYINT(1) NOT NULL DEFAULT 0,
   upvotes INT NOT NULL DEFAULT 0,
   downvotes INT NOT NULL DEFAULT 0,
   source_submission_id INT NULL UNIQUE,
@@ -50,6 +51,7 @@ CREATE TABLE IF NOT EXISTS tools (
   INDEX idx_date_added (date_added),
   INDEX idx_category (category),
   INDEX idx_copy_review (needs_copy_review, date_added),
+  INDEX idx_visible_date (is_hidden, date_added),
   CONSTRAINT fk_tools_submission FOREIGN KEY (source_submission_id)
     REFERENCES tool_submissions(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
