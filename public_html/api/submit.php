@@ -10,6 +10,7 @@ $stmt = $pdo->prepare('INSERT INTO tool_submissions (name, website_url, descript
 $stmt->execute([':name'=>$data['name'],':website_url'=>$data['website_url'],':description'=>$data['description'],':category'=>$data['category'],':pricing'=>$data['pricing'],':tags'=>$data['tags'],':is_open_source'=>$data['is_open_source'],':submitted_ip'=>$ipBin,':user_agent'=>$ua]);
 
 // Optional Telegram alert (best-effort, non-blocking on failures)
+$alertConfig = [];
 $tgToken = trim((string)(getenv('AIDEX_TG_BOT_TOKEN') ?: ''));
 $tgChatId = trim((string)(getenv('AIDEX_TG_CHAT_ID') ?: ''));
 
@@ -37,9 +38,15 @@ if ($tgToken === '' || $tgChatId === '') {
   if ($tgChatId === '') $tgChatId = trim((string)($alertConfig['telegram_chat_id'] ?? ''));
 }
 
+$actionSecret = trim((string)(getenv('AIDEX_TG_ACTION_SECRET') ?: ''));
+if ($actionSecret === '' && !empty($alertConfig)) {
+  $actionSecret = trim((string)($alertConfig['telegram_action_secret'] ?? ''));
+}
+
 if ($tgToken !== '' && $tgChatId !== '') {
   try {
-    $msg = "🆕 New AiDex submission\n"
+    $submissionId = (int)$pdo->lastInsertId();
+    $msg = "🆕 New AiDex submission #{$submissionId}\n"
       . "Name: {$data['name']}\n"
       . "Category: {$data['category']}\n"
       . "Pricing: {$data['pricing']}\n"
@@ -52,6 +59,18 @@ if ($tgToken !== '' && $tgChatId !== '') {
       'text' => $msg,
       'disable_web_page_preview' => true,
     ];
+
+    if ($actionSecret !== '' && $submissionId > 0) {
+      $sigApprove = substr(hash_hmac('sha256', "approve:{$submissionId}", $actionSecret), 0, 12);
+      $sigReject = substr(hash_hmac('sha256', "reject:{$submissionId}", $actionSecret), 0, 12);
+      $payloadArr['reply_markup'] = json_encode([
+        'inline_keyboard' => [[
+          ['text' => '✅ Approve', 'callback_data' => "approve:{$submissionId}:{$sigApprove}"],
+          ['text' => '❌ Reject', 'callback_data' => "reject:{$submissionId}:{$sigReject}"],
+        ]],
+      ], JSON_UNESCAPED_UNICODE);
+    }
+
     $payload = http_build_query($payloadArr);
 
     $response = false;
