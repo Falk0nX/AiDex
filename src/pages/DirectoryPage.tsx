@@ -270,7 +270,7 @@ export default function DirectoryPage() {
         </div>
       </header>
 
-      <main className="main-ambient mx-auto max-w-6xl rounded-2xl border border-neutral-900/70 px-4 py-8">
+      <main className="main-ambient mx-auto max-w-6xl px-4 py-8">
         {loading && <p className="text-sm text-neutral-400">Loading tools…</p>}
         {error && <p className="mb-4 text-sm text-red-300">{error}</p>}
 
