@@ -20,10 +20,14 @@ foreach ($candidates as $path) {
   }
 }
 
-$tgToken = trim((string)(getenv('AIDEX_TG_BOT_TOKEN') ?: ($alertConfig['telegram_bot_token'] ?? '')));
-$tgChatId = trim((string)(getenv('AIDEX_TG_CHAT_ID') ?: ($alertConfig['telegram_chat_id'] ?? '')));
-$actionSecret = trim((string)(getenv('AIDEX_TG_ACTION_SECRET') ?: ($alertConfig['telegram_action_secret'] ?? '')));
-$webhookSecret = trim((string)(getenv('AIDEX_TG_WEBHOOK_SECRET') ?: ($alertConfig['telegram_webhook_secret'] ?? '')));
+$tgToken = trim((string)($alertConfig['telegram_bot_token'] ?? ''));
+$tgChatId = trim((string)($alertConfig['telegram_chat_id'] ?? ''));
+$actionSecret = trim((string)($alertConfig['telegram_action_secret'] ?? ''));
+$webhookSecret = trim((string)($alertConfig['telegram_webhook_secret'] ?? ''));
+if ($tgToken === '') $tgToken = trim((string)(getenv('AIDEX_TG_BOT_TOKEN') ?: ''));
+if ($tgChatId === '') $tgChatId = trim((string)(getenv('AIDEX_TG_CHAT_ID') ?: ''));
+if ($actionSecret === '') $actionSecret = trim((string)(getenv('AIDEX_TG_ACTION_SECRET') ?: ''));
+if ($webhookSecret === '') $webhookSecret = trim((string)(getenv('AIDEX_TG_WEBHOOK_SECRET') ?: ''));
 
 if ($webhookSecret !== '') {
   $hdr = (string)($_SERVER['HTTP_X_TELEGRAM_BOT_API_SECRET_TOKEN'] ?? '');

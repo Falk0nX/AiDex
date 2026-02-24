@@ -11,37 +11,30 @@ $stmt->execute([':name'=>$data['name'],':website_url'=>$data['website_url'],':de
 
 // Optional Telegram alert (best-effort, non-blocking on failures)
 $alertConfig = [];
-$tgToken = trim((string)(getenv('AIDEX_TG_BOT_TOKEN') ?: ''));
-$tgChatId = trim((string)(getenv('AIDEX_TG_CHAT_ID') ?: ''));
+$candidates = [];
+$home = $_SERVER['HOME'] ?? getenv('HOME') ?: null;
+if ($home) {
+  $candidates[] = rtrim($home, '/') . '/aidex-config/alerts.php';
+}
+$candidates[] = dirname(__DIR__, 3) . '/aidex-config/alerts.php';
 
-// Shared-hosting fallback: load from private config file if env vars are missing.
-if ($tgToken === '' || $tgChatId === '') {
-  $alertConfig = [];
-  $candidates = [];
-  $home = $_SERVER['HOME'] ?? getenv('HOME') ?: null;
-  if ($home) {
-    $candidates[] = rtrim($home, '/') . '/aidex-config/alerts.php';
-  }
-  $candidates[] = dirname(__DIR__, 3) . '/aidex-config/alerts.php';
-
-  foreach ($candidates as $path) {
-    if ($path && is_file($path)) {
-      $loaded = @require $path;
-      if (is_array($loaded)) {
-        $alertConfig = $loaded;
-      }
-      break;
+foreach ($candidates as $path) {
+  if ($path && is_file($path)) {
+    $loaded = @require $path;
+    if (is_array($loaded)) {
+      $alertConfig = $loaded;
     }
+    break;
   }
-
-  if ($tgToken === '') $tgToken = trim((string)($alertConfig['telegram_bot_token'] ?? ''));
-  if ($tgChatId === '') $tgChatId = trim((string)($alertConfig['telegram_chat_id'] ?? ''));
 }
 
-$actionSecret = trim((string)(getenv('AIDEX_TG_ACTION_SECRET') ?: ''));
-if ($actionSecret === '' && !empty($alertConfig)) {
-  $actionSecret = trim((string)($alertConfig['telegram_action_secret'] ?? ''));
-}
+// Prefer private file config on shared hosting; fallback to env vars only if missing.
+$tgToken = trim((string)($alertConfig['telegram_bot_token'] ?? ''));
+$tgChatId = trim((string)($alertConfig['telegram_chat_id'] ?? ''));
+$actionSecret = trim((string)($alertConfig['telegram_action_secret'] ?? ''));
+if ($tgToken === '') $tgToken = trim((string)(getenv('AIDEX_TG_BOT_TOKEN') ?: ''));
+if ($tgChatId === '') $tgChatId = trim((string)(getenv('AIDEX_TG_CHAT_ID') ?: ''));
+if ($actionSecret === '') $actionSecret = trim((string)(getenv('AIDEX_TG_ACTION_SECRET') ?: ''));
 
 if ($tgToken !== '' && $tgChatId !== '') {
   try {
