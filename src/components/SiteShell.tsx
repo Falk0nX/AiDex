@@ -4,7 +4,7 @@ import BackToTopButton from "./BackToTopButton";
 
 export default function SiteShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
-    <div className="app-ambient min-h-screen text-neutral-50">
+    <div className="site-base min-h-screen text-neutral-50">
       <header className="gradient-dot-hero border-b border-neutral-800/90 bg-neutral-950/70 shadow-[0_18px_50px_rgba(6,8,16,0.6)] backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5">
           <Link to="/" className="flex items-center gap-3 hover:opacity-90">
@@ -24,7 +24,7 @@ export default function SiteShell({ title, subtitle, children }: { title: string
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+      <main className="main-ambient mx-auto max-w-6xl rounded-2xl border border-neutral-900/70 px-4 py-8">{children}</main>
 
       <footer className="mt-10 border-t border-neutral-800">
         <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-neutral-500">

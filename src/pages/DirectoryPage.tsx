@@ -158,7 +158,7 @@ export default function DirectoryPage() {
   };
 
   return (
-    <div className="app-ambient min-h-screen text-neutral-50">
+    <div className="site-base min-h-screen text-neutral-50">
       <header className="gradient-dot-hero border-b border-neutral-800/90 bg-neutral-950/70 shadow-[0_18px_50px_rgba(6,8,16,0.6)] backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -268,7 +268,7 @@ export default function DirectoryPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="main-ambient mx-auto max-w-6xl rounded-2xl border border-neutral-900/70 px-4 py-8">
         {loading && <p className="text-sm text-neutral-400">Loading tools…</p>}
         {error && <p className="mb-4 text-sm text-red-300">{error}</p>}
 
