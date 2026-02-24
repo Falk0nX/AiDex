@@ -140,6 +140,8 @@ export default function DirectoryPage() {
         category?: string;
         pricing?: Pricing;
         tags?: string;
+        fallback?: boolean;
+        note?: string;
       }>("/api/enrich_tool.php", { website_url: websiteUrl.trim() });
 
       if (res.name) setName(res.name);
@@ -157,6 +159,9 @@ export default function DirectoryPage() {
         }
       }
 
+      if (res.fallback && res.note) {
+        setSubmitMessage(res.note);
+      }
       setSubmitStep(2);
     } catch (err: any) {
       setSubmitMessage(err.message || "Could not auto-fill from this website");

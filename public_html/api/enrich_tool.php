@@ -92,7 +92,21 @@ foreach ($urlsToTry as $tryUrl) {
 
 if ($html === false) {
   error_log('AiDex enrich_tool fetch failed for ' . $url . ' (' . $lastErr . ')');
-  json_error('Could not read website metadata');
+
+  // Graceful fallback: don't block submission flow when metadata scraping is blocked.
+  $hostLabel = ucfirst((string)preg_replace('/\..*$/', '', preg_replace('/^www\./i', '', $host)));
+  $fallbackName = $hostLabel !== '' ? $hostLabel : 'New Tool';
+  $fallbackDesc = 'AI tool from ' . preg_replace('/^www\./i', '', $host) . '. Please review and refine details before submitting.';
+
+  json_ok([
+    'name' => mb_substr($fallbackName, 0, 120),
+    'description' => mb_substr($fallbackDesc, 0, 500),
+    'category' => 'Models',
+    'pricing' => 'Freemium',
+    'tags' => 'ai,tool',
+    'fallback' => true,
+    'note' => 'Could not fetch metadata automatically. Please review the prefilled values.',
+  ]);
 }
 
 $html = mb_substr((string)$html, 0, 350000);
