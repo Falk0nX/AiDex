@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../lib/api";
 import { getAiDexScore } from "../lib/scoring";
+import BackToTopButton from "../components/BackToTopButton";
 
 type Pricing = "Free" | "Paid" | "Freemium" | "Open Source";
 
@@ -158,7 +159,7 @@ export default function DirectoryPage() {
 
   return (
     <div className="app-ambient min-h-screen text-neutral-50">
-      <header className="gradient-dot-hero border-b border-neutral-800/80 backdrop-blur">
+      <header className="gradient-dot-hero border-b border-neutral-800/90 bg-neutral-950/70 shadow-[0_18px_50px_rgba(6,8,16,0.6)] backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
@@ -480,6 +481,8 @@ export default function DirectoryPage() {
           </p>
         </div>
       </footer>
+
+      <BackToTopButton />
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
+import BackToTopButton from "./BackToTopButton";
 
 export default function SiteShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
     <div className="app-ambient min-h-screen text-neutral-50">
-      <header className="gradient-dot-hero border-b border-neutral-800/80 backdrop-blur">
+      <header className="gradient-dot-hero border-b border-neutral-800/90 bg-neutral-950/70 shadow-[0_18px_50px_rgba(6,8,16,0.6)] backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5">
           <Link to="/" className="flex items-center gap-3 hover:opacity-90">
             <img src="/aidex-logo-square.jpg" alt="AiDex logo" className="h-10 w-10 rounded-md border border-neutral-800 object-cover" />
@@ -31,6 +32,8 @@ export default function SiteShell({ title, subtitle, children }: { title: string
           <a href="https://github.com/Falk0nX/AiDex" target="_blank" rel="noopener noreferrer" className="ml-1 text-neutral-300 underline decoration-neutral-700 hover:decoration-neutral-300">github.com/Falk0nX/AiDex</a>
         </div>
       </footer>
+
+      <BackToTopButton />
     </div>
   );
 }
