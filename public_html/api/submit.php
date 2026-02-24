@@ -12,6 +12,31 @@ $stmt->execute([':name'=>$data['name'],':website_url'=>$data['website_url'],':de
 // Optional Telegram alert (best-effort, non-blocking on failures)
 $tgToken = trim((string)(getenv('AIDEX_TG_BOT_TOKEN') ?: ''));
 $tgChatId = trim((string)(getenv('AIDEX_TG_CHAT_ID') ?: ''));
+
+// Shared-hosting fallback: load from private config file if env vars are missing.
+if ($tgToken === '' || $tgChatId === '') {
+  $alertConfig = [];
+  $candidates = [];
+  $home = $_SERVER['HOME'] ?? getenv('HOME') ?: null;
+  if ($home) {
+    $candidates[] = rtrim($home, '/') . '/aidex-config/alerts.php';
+  }
+  $candidates[] = dirname(__DIR__, 3) . '/aidex-config/alerts.php';
+
+  foreach ($candidates as $path) {
+    if ($path && is_file($path)) {
+      $loaded = @require $path;
+      if (is_array($loaded)) {
+        $alertConfig = $loaded;
+      }
+      break;
+    }
+  }
+
+  if ($tgToken === '') $tgToken = trim((string)($alertConfig['telegram_bot_token'] ?? ''));
+  if ($tgChatId === '') $tgChatId = trim((string)($alertConfig['telegram_chat_id'] ?? ''));
+}
+
 if ($tgToken !== '' && $tgChatId !== '') {
   try {
     $msg = "🆕 New AiDex submission\n"
