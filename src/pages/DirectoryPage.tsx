@@ -58,6 +58,8 @@ export default function DirectoryPage() {
   const [submitState, setSubmitState] = useState<"idle" | "sending">("idle");
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
+  const [submitStep, setSubmitStep] = useState<1 | 2>(1);
+  const [autofillState, setAutofillState] = useState<"idle" | "loading">("idle");
 
   useEffect(() => {
     (async () => {
@@ -121,6 +123,47 @@ export default function DirectoryPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
+  const onAutofillFromWebsite = async () => {
+    if (!websiteUrl.trim()) {
+      setSubmitMessage("Enter a website URL first.");
+      return;
+    }
+
+    setSubmitMessage(null);
+    setAutofillState("loading");
+    try {
+      const res = await apiPost<{
+        ok: true;
+        name?: string;
+        description?: string;
+        category?: string;
+        pricing?: Pricing;
+        tags?: string;
+      }>("/api/enrich_tool.php", { website_url: websiteUrl.trim() });
+
+      if (res.name) setName(res.name);
+      if (res.description) setDescription(res.description);
+      if (res.pricing) setSubmitPricing(res.pricing);
+      if (res.tags) setTags(res.tags);
+
+      if (res.category) {
+        if (submitCategoryOptions.includes(res.category)) {
+          setSubmitCategory(res.category);
+          setCustomCategory("");
+        } else {
+          setSubmitCategory("Other");
+          setCustomCategory(res.category);
+        }
+      }
+
+      setSubmitStep(2);
+    } catch (err: any) {
+      setSubmitMessage(err.message || "Could not auto-fill from this website");
+    } finally {
+      setAutofillState("idle");
+    }
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitMessage(null);
@@ -149,6 +192,7 @@ export default function DirectoryPage() {
       setTags("");
       setSubmitCategory(submitCategoryOptions[0] ?? "AI Education");
       setCustomCategory("");
+      setSubmitStep(1);
       setIsSubmitOpen(false);
     } catch (err: any) {
       setSubmitMessage(err.message || "Submission failed");
@@ -208,7 +252,17 @@ export default function DirectoryPage() {
             <div className="flex flex-wrap items-center gap-2">
               <Link to="/leaderboard" className="gradient-btn"><span>Leaderboard</span></Link>
               <Link to="/compare" className="gradient-btn"><span>Compare</span></Link>
-              <button type="button" onClick={() => setIsSubmitOpen(true)} className="gradient-btn"><span>Submit a tool</span></button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitStep(1);
+                  setSubmitMessage(null);
+                  setIsSubmitOpen(true);
+                }}
+                className="gradient-btn"
+              >
+                <span>Submit a tool</span>
+              </button>
             </div>
           </div>
 
@@ -421,7 +475,10 @@ export default function DirectoryPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setIsSubmitOpen(false)}
+                  onClick={() => {
+                    setSubmitStep(1);
+                    setIsSubmitOpen(false);
+                  }}
                   className="rounded-lg border border-neutral-700 px-2.5 py-1.5 text-sm text-neutral-200 hover:border-neutral-500"
                 >
                   ✕
@@ -429,77 +486,115 @@ export default function DirectoryPage() {
               </div>
 
               <form className="grid gap-3 md:grid-cols-3" onSubmit={onSubmit}>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                  placeholder="Tool name"
-                  required
-                />
-                <input
-                  value={websiteUrl}
-                  onChange={(e) => setWebsiteUrl(e.target.value)}
-                  className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                  placeholder="Website URL"
-                  required
-                />
-                <select
-                  value={submitPricing}
-                  onChange={(e) => setSubmitPricing(e.target.value as Pricing)}
-                  className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                >
-                  <option>Free</option>
-                  <option>Freemium</option>
-                  <option>Paid</option>
-                  <option>Open Source</option>
-                </select>
-                <select
-                  value={submitCategory}
-                  onChange={(e) => setSubmitCategory(e.target.value)}
-                  className="md:col-span-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                >
-                  {submitCategoryOptions.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                  <option value="Other">Other</option>
-                </select>
-                <input
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                  className="md:col-span-1 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600 disabled:opacity-50"
-                  placeholder="New category"
-                  disabled={submitCategory !== "Other"}
-                  required={submitCategory === "Other"}
-                />
-                <input
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                  className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                  placeholder="Tags (comma-separated)"
-                />
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                  placeholder="Short description"
-                  rows={3}
-                  required
-                />
-                <div className="md:col-span-3 flex items-center justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsSubmitOpen(false)}
-                    className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    disabled={submitState === "sending"}
-                    className="gradient-btn disabled:opacity-50"
-                  >
-                    <span>{submitState === "sending" ? "Submitting…" : "Submit for review"}</span>
-                  </button>
+                <div className="md:col-span-3 mb-1 text-xs text-neutral-400">
+                  Step {submitStep} of 2
                 </div>
+
+                {submitStep === 1 ? (
+                  <>
+                    <input
+                      value={websiteUrl}
+                      onChange={(e) => setWebsiteUrl(e.target.value)}
+                      className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                      placeholder="https://tool-website.com"
+                      required
+                    />
+                    <div className="md:col-span-3 flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSubmitStep(1);
+                          setIsSubmitOpen(false);
+                        }}
+                        className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        disabled={autofillState === "loading"}
+                        onClick={onAutofillFromWebsite}
+                        className="gradient-btn disabled:opacity-50"
+                      >
+                        <span>{autofillState === "loading" ? "Auto-filling…" : "Next: Auto-fill details"}</span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                      placeholder="Tool name"
+                      required
+                    />
+                    <input
+                      value={websiteUrl}
+                      onChange={(e) => setWebsiteUrl(e.target.value)}
+                      className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                      placeholder="Website URL"
+                      required
+                    />
+                    <select
+                      value={submitPricing}
+                      onChange={(e) => setSubmitPricing(e.target.value as Pricing)}
+                      className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                    >
+                      <option>Free</option>
+                      <option>Freemium</option>
+                      <option>Paid</option>
+                      <option>Open Source</option>
+                    </select>
+                    <select
+                      value={submitCategory}
+                      onChange={(e) => setSubmitCategory(e.target.value)}
+                      className="md:col-span-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                    >
+                      {submitCategoryOptions.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                      <option value="Other">Other</option>
+                    </select>
+                    <input
+                      value={customCategory}
+                      onChange={(e) => setCustomCategory(e.target.value)}
+                      className="md:col-span-1 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600 disabled:opacity-50"
+                      placeholder="New category"
+                      disabled={submitCategory !== "Other"}
+                      required={submitCategory === "Other"}
+                    />
+                    <input
+                      value={tags}
+                      onChange={(e) => setTags(e.target.value)}
+                      className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                      placeholder="Tags (comma-separated)"
+                    />
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                      placeholder="Short description"
+                      rows={3}
+                      required
+                    />
+                    <div className="md:col-span-3 flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setSubmitStep(1)}
+                        className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
+                      >
+                        Back
+                      </button>
+                      <button
+                        disabled={submitState === "sending"}
+                        className="gradient-btn disabled:opacity-50"
+                      >
+                        <span>{submitState === "sending" ? "Submitting…" : "Submit for review"}</span>
+                      </button>
+                    </div>
+                  </>
+                )}
               </form>
 
               {submitMessage && <p className="mt-3 text-sm text-neutral-300">{submitMessage}</p>}
