@@ -10,8 +10,13 @@ if (!is_array($update)) json_ok(['ok' => true]);
 $alertConfig = [];
 $candidates = [];
 $home = $_SERVER['HOME'] ?? getenv('HOME') ?: null;
-if ($home) $candidates[] = rtrim($home, '/') . '/aidex-config/alerts.php';
+if ($home) {
+  $home = rtrim($home, '/');
+  $candidates[] = $home . '/aidex-config/alerts.php';
+  $candidates[] = $home . '/site/aidex-config/alerts.php';
+}
 $candidates[] = dirname(__DIR__, 3) . '/aidex-config/alerts.php';
+$candidates[] = dirname(__DIR__, 2) . '/aidex-config/alerts.php';
 foreach ($candidates as $path) {
   if ($path && is_file($path)) {
     $loaded = @require $path;
