@@ -1,0 +1,12 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { apiGet, apiPost } from '../lib/api';
+type Submission = { id:number; name:string; website_url:string; description:string; category:string; pricing:string; tags:string; created_at:string; };
+export default function AdminDashboardPage() {
+  const nav = useNavigate(); const [items,setItems]=useState<Submission[]>([]); const [loading,setLoading]=useState(true); const [error,setError]=useState<string|null>(null);
+  const load = async()=>{ setError(null); try { const res=await apiGet<{ok:true;items:Submission[]}>('/api/get_pending.php'); setItems(res.items||[]); } catch(e:any) { if ((e.message||'').toLowerCase().includes('unauthorized')) { nav('/admin/login'); return; } setError(e.message||'Failed to load'); } finally { setLoading(false);} };
+  useEffect(()=>{load();},[]);
+  const act=async(path:string,id:number)=>{ try{ await apiPost(path,{id}); await load(); }catch(e:any){ setError(e.message||'Action failed'); }};
+  const logout=async()=>{ await apiPost('/api/admin_logout.php',{}); nav('/admin/login'); };
+  return <div className="min-h-screen bg-neutral-950 text-neutral-50 p-4"><div className="mx-auto max-w-5xl"><div className="mb-4 flex items-center justify-between"><h1 className="text-2xl font-semibold">Pending submissions</h1><button onClick={logout} className="rounded-lg border border-neutral-700 px-3 py-2 text-sm">Logout</button></div>{loading&&<p className="text-sm text-neutral-400">Loading…</p>}{error&&<p className="mb-3 text-sm text-red-300">{error}</p>}<div className="grid gap-3">{items.map(it=><article key={it.id} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4"><h2 className="text-lg font-semibold">{it.name}</h2><p className="mt-1 text-sm text-neutral-300">{it.description}</p><div className="mt-2 text-xs text-neutral-400">{it.category} · {it.pricing} · {it.tags}</div><a href={it.website_url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-sm underline">{it.website_url}</a><div className="mt-4 flex gap-2"><button onClick={()=>act('/api/approve.php',it.id)} className="rounded-lg bg-emerald-500 px-3 py-2 text-sm text-black">Approve</button><button onClick={()=>act('/api/reject.php',it.id)} className="rounded-lg bg-red-500 px-3 py-2 text-sm text-black">Reject</button></div></article>)}{!loading&&items.length===0&&<p className="text-sm text-neutral-400">No pending submissions.</p>}</div></div></div>;
+}
