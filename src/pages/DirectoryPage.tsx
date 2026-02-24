@@ -159,7 +159,7 @@ export default function DirectoryPage() {
 
   return (
     <div className="site-base min-h-screen text-neutral-50">
-      <header className="gradient-dot-hero border-b border-neutral-800/80 backdrop-blur">
+      <header className="gradient-dot-hero border-b border-cyan-900/40 shadow-[0_20px_60px_rgba(2,6,23,0.65)] backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
@@ -197,7 +197,7 @@ export default function DirectoryPage() {
 
           <div className="mt-6 grid gap-3 md:grid-cols-12">
             <div className="md:col-span-5">
-              <label className="text-xs text-neutral-400">Search</label>
+              <label className="text-xs text-neutral-200">Search</label>
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -207,7 +207,7 @@ export default function DirectoryPage() {
             </div>
 
             <div className="md:col-span-3">
-              <label className="text-xs text-neutral-400">Category</label>
+              <label className="text-xs text-neutral-200">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -222,7 +222,7 @@ export default function DirectoryPage() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-xs text-neutral-400">Pricing</label>
+              <label className="text-xs text-neutral-200">Pricing</label>
               <select
                 value={pricing}
                 onChange={(e) => setPricing(e.target.value as any)}
@@ -237,7 +237,7 @@ export default function DirectoryPage() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-xs text-neutral-400">Sort</label>
+              <label className="text-xs text-neutral-200">Sort</label>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as any)}
@@ -260,7 +260,7 @@ export default function DirectoryPage() {
                 Open-source only
               </label>
 
-              <div className="text-xs text-neutral-400">
+              <div className="text-xs text-neutral-200">
                 Showing <span className="text-neutral-200">{Math.min(page * pageSize, filtered.length)}</span>{" "}
                 of <span className="text-neutral-200">{filtered.length}</span> tool
                 {filtered.length === 1 ? "" : "s"}

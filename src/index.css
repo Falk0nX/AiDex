@@ -4,33 +4,23 @@
 
 @layer components {
   .gradient-dot-hero {
-    background-color: #09090b;
+    background-color: #07080d;
     background-image:
-      radial-gradient(circle at 12% -10%, rgba(34, 211, 238, 0.26), transparent 34%),
-      radial-gradient(circle at 88% -12%, rgba(168, 85, 247, 0.24), transparent 36%),
-      radial-gradient(circle at 50% -30%, rgba(59, 130, 246, 0.2), transparent 44%);
+      radial-gradient(circle at 10% -20%, rgba(34, 211, 238, 0.32), transparent 38%),
+      radial-gradient(circle at 90% -18%, rgba(168, 85, 247, 0.3), transparent 40%),
+      radial-gradient(circle at 50% -40%, rgba(59, 130, 246, 0.26), transparent 48%);
     background-size: auto, auto, auto;
-    background-position: 12% -10%, 88% -12%, 50% -30%;
-    animation: aidex-gradient-drift 3.5s ease-in-out infinite alternate;
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 100%);
+    background-position: 10% -20%, 90% -18%, 50% -40%;
+    animation: aidex-gradient-drift 3s ease-in-out infinite alternate;
   }
 
   .site-base {
     background-color: #09090b;
-    background-image:
-      radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.14), transparent 28%),
-      radial-gradient(circle at 80% 0%, rgba(168, 85, 247, 0.12), transparent 30%);
   }
 
   .main-ambient {
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.09), transparent 28%),
-      radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.09), transparent 32%),
-      radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.08), transparent 40%);
-    background-size: auto, auto, auto;
-    background-position: 15% 20%, 85% 30%, 50% 100%;
-    animation: aidex-ambient-drift 4s ease-in-out infinite alternate;
+    background-color: #0a0a0d;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
   }
 
   @keyframes aidex-gradient-drift {

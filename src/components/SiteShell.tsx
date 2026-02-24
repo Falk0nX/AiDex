@@ -5,7 +5,7 @@ import BackToTopButton from "./BackToTopButton";
 export default function SiteShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
     <div className="site-base min-h-screen text-neutral-50">
-      <header className="gradient-dot-hero border-b border-neutral-800/80 backdrop-blur">
+      <header className="gradient-dot-hero border-b border-cyan-900/40 shadow-[0_20px_60px_rgba(2,6,23,0.65)] backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-5">
           <Link to="/" className="flex items-center gap-3 hover:opacity-90">
             <img src="/aidex-logo-square.jpg" alt="AiDex logo" className="h-10 w-10 rounded-md border border-neutral-800 object-cover" />
