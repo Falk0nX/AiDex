@@ -51,7 +51,7 @@ export default function DirectoryPage() {
   const [name, setName] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [submitPricing, setSubmitPricing] = useState<Pricing>("Free");
-  const [submitCategory, setSubmitCategory] = useState("AI Education");
+  const [submitCategory, setSubmitCategory] = useState("Education");
   const [customCategory, setCustomCategory] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
@@ -83,7 +83,7 @@ export default function DirectoryPage() {
 
   const submitCategoryOptions = useMemo(() => {
     const options = categories.filter((c) => c !== "All");
-    return options.length ? options : ["AI Education"];
+    return options.length ? options : ["Education"];
   }, [categories]);
 
   useEffect(() => {
@@ -192,7 +192,7 @@ export default function DirectoryPage() {
       setWebsiteUrl("");
       setDescription("");
       setTags("");
-      setSubmitCategory(submitCategoryOptions[0] ?? "AI Education");
+      setSubmitCategory(submitCategoryOptions[0] ?? "Education");
       setCustomCategory("");
       setSubmitStep(1);
       setIsSubmitOpen(false);

@@ -80,13 +80,14 @@ $description = mb_substr($description, 0, 500);
 
 $textForGuess = strtolower($title . ' ' . $description . ' ' . $keywords . ' ' . $host);
 
-$category = 'AI Education';
+$category = 'Education';
 if (str_contains($textForGuess, 'video')) $category = 'Video';
 if (str_contains($textForGuess, 'podcast') || str_contains($textForGuess, 'audio')) $category = 'Podcasting';
 if (str_contains($textForGuess, 'image') || str_contains($textForGuess, 'photo')) $category = 'Image Generation';
-if (str_contains($textForGuess, 'code') || str_contains($textForGuess, 'developer')) $category = 'Coding AI';
-if (str_contains($textForGuess, 'voice') || str_contains($textForGuess, 'speech')) $category = 'Voice AI';
+if (str_contains($textForGuess, 'code') || str_contains($textForGuess, 'developer')) $category = 'Coding';
+if (str_contains($textForGuess, 'voice') || str_contains($textForGuess, 'speech')) $category = 'Voice';
 if (str_contains($textForGuess, 'model') || str_contains($textForGuess, 'llm')) $category = 'Models';
+if (str_contains($textForGuess, 'music')) $category = 'Music';
 
 $pricing = 'Freemium';
 if (str_contains($textForGuess, 'open source') || str_contains($textForGuess, 'github.com')) $pricing = 'Open Source';
