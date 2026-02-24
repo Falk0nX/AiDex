@@ -56,6 +56,7 @@ export default function DirectoryPage() {
   const [tags, setTags] = useState("");
   const [submitState, setSubmitState] = useState<"idle" | "sending">("idle");
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const [isSubmitOpen, setIsSubmitOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -133,6 +134,7 @@ export default function DirectoryPage() {
       setWebsiteUrl("");
       setDescription("");
       setTags("");
+      setIsSubmitOpen(false);
     } catch (err: any) {
       setSubmitMessage(err.message || "Submission failed");
     } finally {
@@ -191,7 +193,7 @@ export default function DirectoryPage() {
             <div className="flex flex-wrap items-center gap-2">
               <Link to="/leaderboard" className="gradient-btn"><span>Leaderboard</span></Link>
               <Link to="/compare" className="gradient-btn"><span>Compare</span></Link>
-              <a href="#submit" className="gradient-btn"><span>Submit a tool</span></a>
+              <button type="button" onClick={() => setIsSubmitOpen(true)} className="gradient-btn"><span>Submit a tool</span></button>
             </div>
           </div>
 
@@ -394,68 +396,90 @@ export default function DirectoryPage() {
           </p>
         </section>
 
-        <section id="submit" className="mt-6 rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-          <h3 className="text-lg font-semibold">Submit a tool</h3>
-          <p className="mt-1 text-sm text-neutral-300">
-            Submissions go into a review queue (admin approval).
-          </p>
+        {isSubmitOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+            <div className="w-full max-w-2xl rounded-2xl border border-neutral-800 bg-neutral-950 p-6 shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-semibold">Submit a tool</h3>
+                  <p className="mt-1 text-sm text-neutral-300">Submissions go into a review queue (admin approval).</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsSubmitOpen(false)}
+                  className="rounded-lg border border-neutral-700 px-2.5 py-1.5 text-sm text-neutral-200 hover:border-neutral-500"
+                >
+                  ✕
+                </button>
+              </div>
 
-          <form className="mt-4 grid gap-3 md:grid-cols-3" onSubmit={onSubmit}>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              placeholder="Tool name"
-              required
-            />
-            <input
-              value={websiteUrl}
-              onChange={(e) => setWebsiteUrl(e.target.value)}
-              className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              placeholder="Website URL"
-              required
-            />
-            <select
-              value={submitPricing}
-              onChange={(e) => setSubmitPricing(e.target.value as Pricing)}
-              className="rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-            >
-              <option>Free</option>
-              <option>Freemium</option>
-              <option>Paid</option>
-              <option>Open Source</option>
-            </select>
-            <input
-              value={submitCategory}
-              onChange={(e) => setSubmitCategory(e.target.value)}
-              className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              placeholder="Category"
-              required
-            />
-            <input
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              placeholder="Tags (comma-separated)"
-            />
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              placeholder="Short description"
-              rows={3}
-              required
-            />
-            <button
-              disabled={submitState === "sending"}
-              className="gradient-btn md:col-span-3 disabled:opacity-50"
-            >
-              <span>{submitState === "sending" ? "Submitting…" : "Submit for review"}</span>
-            </button>
-          </form>
+              <form className="grid gap-3 md:grid-cols-3" onSubmit={onSubmit}>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                  placeholder="Tool name"
+                  required
+                />
+                <input
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                  className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                  placeholder="Website URL"
+                  required
+                />
+                <select
+                  value={submitPricing}
+                  onChange={(e) => setSubmitPricing(e.target.value as Pricing)}
+                  className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                >
+                  <option>Free</option>
+                  <option>Freemium</option>
+                  <option>Paid</option>
+                  <option>Open Source</option>
+                </select>
+                <input
+                  value={submitCategory}
+                  onChange={(e) => setSubmitCategory(e.target.value)}
+                  className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                  placeholder="Category"
+                  required
+                />
+                <input
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                  placeholder="Tags (comma-separated)"
+                />
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                  placeholder="Short description"
+                  rows={3}
+                  required
+                />
+                <div className="md:col-span-3 flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsSubmitOpen(false)}
+                    className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    disabled={submitState === "sending"}
+                    className="gradient-btn disabled:opacity-50"
+                  >
+                    <span>{submitState === "sending" ? "Submitting…" : "Submit for review"}</span>
+                  </button>
+                </div>
+              </form>
 
-          {submitMessage && <p className="mt-3 text-sm text-neutral-300">{submitMessage}</p>}
-        </section>
+              {submitMessage && <p className="mt-3 text-sm text-neutral-300">{submitMessage}</p>}
+            </div>
+          </div>
+        )}
       </main>
 
       <footer className="border-t border-neutral-800">
