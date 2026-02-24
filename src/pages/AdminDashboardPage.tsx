@@ -37,6 +37,7 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<number | null>(null);
+  const [publishedQuery, setPublishedQuery] = useState('');
 
   const load = async () => {
     setError(null);
@@ -198,6 +199,12 @@ export default function AdminDashboardPage() {
     nav('/admin/login');
   };
 
+  const filteredPublished = published.filter((t) => {
+    const q = publishedQuery.trim().toLowerCase();
+    if (!q) return true;
+    return [t.name, t.website_url, t.category, t.tags, t.description].join(' ').toLowerCase().includes(q);
+  });
+
   const ToolEditor = ({ t, setFn, showReviewActions = false }: { t: ToolItem; setFn: any; showReviewActions?: boolean }) => (
     <article className="rounded-xl border border-neutral-800 bg-neutral-950 p-4">
       <div className="grid gap-2 md:grid-cols-2">
@@ -277,9 +284,18 @@ export default function AdminDashboardPage() {
         <section className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
           <h2 className="text-lg font-semibold">Manage published tools</h2>
           <p className="mt-1 text-xs text-neutral-400">Edit, hide/unhide, or delete any published card.</p>
+          <input
+            value={publishedQuery}
+            onChange={(e) => setPublishedQuery(e.target.value)}
+            placeholder="Search published tools by name, URL, tags, category…"
+            className="mt-3 w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+          />
           <div className="mt-3 grid gap-3">
-            {published.map((t) => <ToolEditor key={t.id} t={t} setFn={setPublished} />)}
+            {filteredPublished.map((t) => <ToolEditor key={t.id} t={t} setFn={setPublished} />)}
             {!loading && published.length === 0 && <p className="text-sm text-neutral-400">No published tools found.</p>}
+            {!loading && published.length > 0 && filteredPublished.length === 0 && (
+              <p className="text-sm text-neutral-400">No tools match your search.</p>
+            )}
           </div>
         </section>
       </div>
