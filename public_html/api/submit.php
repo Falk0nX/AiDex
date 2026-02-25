@@ -5,6 +5,36 @@ require_method('POST');
 require_csrf_for_post();
 rate_limit_or_fail('submit', 10, 300);
 $input = get_json_input(); $data = validate_submission($input);
+
+// Duplicate checks (name + canonical URL) across published and pending submissions.
+$incomingName = mb_strtolower(trim((string)$data['name']));
+$incomingUrlKey = canonicalize_url_for_match((string)$data['website_url']);
+$dupStmt = $pdo->query('SELECT "tool" AS src, id, name, website_url, NULL AS status FROM tools UNION ALL SELECT "submission" AS src, id, name, website_url, status FROM tool_submissions WHERE status IN ("pending", "approved")');
+$rows = $dupStmt->fetchAll();
+foreach ($rows as $row) {
+  $rowName = mb_strtolower(trim((string)($row['name'] ?? '')));
+  $rowUrlKey = canonicalize_url_for_match((string)($row['website_url'] ?? ''));
+
+  if ($incomingUrlKey !== '' && $rowUrlKey !== '' && $incomingUrlKey === $rowUrlKey) {
+    if (($row['src'] ?? '') === 'tool') {
+      json_error('This tool URL already exists in AiDex.');
+    }
+    if (($row['status'] ?? '') === 'pending') {
+      json_error('This tool is already pending review.');
+    }
+    json_error('This tool was already submitted.');
+  }
+
+  if ($incomingName !== '' && $rowName !== '' && $incomingName === $rowName) {
+    if (($row['src'] ?? '') === 'tool') {
+      json_error('A tool with this name already exists.');
+    }
+    if (($row['status'] ?? '') === 'pending') {
+      json_error('A tool with this name is already pending review.');
+    }
+  }
+}
+
 $ua = substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255); $ipBin = get_client_ip_binary();
 $stmt = $pdo->prepare('INSERT INTO tool_submissions (name, website_url, description, category, pricing, tags, is_open_source, submitted_ip, user_agent, status) VALUES (:name, :website_url, :description, :category, :pricing, :tags, :is_open_source, :submitted_ip, :user_agent, "pending")');
 $stmt->execute([':name'=>$data['name'],':website_url'=>$data['website_url'],':description'=>$data['description'],':category'=>$data['category'],':pricing'=>$data['pricing'],':tags'=>$data['tags'],':is_open_source'=>$data['is_open_source'],':submitted_ip'=>$ipBin,':user_agent'=>$ua]);

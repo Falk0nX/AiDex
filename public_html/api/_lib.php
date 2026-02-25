@@ -18,6 +18,22 @@ function normalize_tags(string $tagsCsv): array {
   foreach ($parts as $tag) if (mb_strlen($tag) > AIDEX_TAG_LEN_MAX) json_error('Tag too long (max '.AIDEX_TAG_LEN_MAX.' chars)');
   return $parts;
 }
+function canonicalize_url_for_match(string $url): string {
+  $url = trim($url);
+  if ($url === '') return '';
+  $parts = @parse_url($url);
+  if (!is_array($parts)) return strtolower($url);
+
+  $host = strtolower((string)($parts['host'] ?? ''));
+  $host = preg_replace('/^www\./', '', $host) ?? $host;
+  $path = (string)($parts['path'] ?? '');
+  $path = preg_replace('#/+#', '/', $path) ?? $path;
+  $path = rtrim($path, '/');
+  if ($path === '') $path = '/';
+
+  return $host . $path;
+}
+
 function validate_submission(array $input): array {
   $name = trim((string)($input['name'] ?? ''));
   $websiteUrl = trim((string)($input['website_url'] ?? ''));
