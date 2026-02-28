@@ -12,722 +12,418 @@ export type BlogPost = {
 };
 
 export const BLOG_POSTS: BlogPost[] = [
-  // PUBLISHED - 4 posts
+  // PUBLISHED
   {
     id: "1",
-    title: "Best AI Coding Assistants in 2026: Complete Comparison",
+    title: "Best AI Coding Assistants in 2026: My Take After Using All of Them",
     slug: "best-ai-coding-assistants-2026",
-    excerpt: "Compare the top AI coding tools including Cursor, Continue, and Tabby. Find the perfect AI pair programmer for your workflow in 2026.",
-    content: `# Best AI Coding Assistants in 2026: Complete Comparison
+    excerpt: "I've tried every major AI coding tool. Here's what actually works and what doesn't.",
+    content: `I've been writing code for years, and honestly? These AI assistants have changed how I work. But not all of them are worth your time.
 
-AI coding assistants have revolutionized how developers write code. Whether you're debugging, writing boilerplate, or learning new frameworks, the right AI partner can dramatically boost your productivity.
+## The Big Three Worth Knowing
 
-## Top AI Coding Assistants
+### Cursor - The Smooth Operator
+Cursor is basically VS Code but smarter. The first time it refactored a messy function into something clean while I made coffee, I was sold.
 
-### 1. Cursor
-The AI-first code editor built on VS Code. Cursor offers:
-- **Smart autocomplete** that understands your entire codebase
-- **Chat mode** for natural language coding questions
-- **Edit mode** to refactor code with simple instructions
-- **Context awareness** across multiple files
+What I like:
+- It just works. No config needed
+- The chat feature understands your whole codebase
+- Great for quick bug fixes
 
-**Best for:** Developers who want a drop-in replacement for their favorite editor with powerful AI features.
+What frustrates me:
+- The free tier is limited
+- Sometimes suggests things that don't fit your style
+- Can be pricey if you want the full version
 
-### 2. Continue
-An open-source extension for VS Code and JetBrains IDEs. Continue provides:
-- **Self-hosted options** for privacy-conscious teams
-- **Customizable AI backends** (use Ollama, Claude, GPT-4)
-- **Slash commands** for common operations
-- **Context from your codebase** for relevant suggestions
+### Continue - For the Privacy Crowd
+If you don't want your code going to the cloud, Continue is your friend. It's open source and runs locally.
 
-**Best for:** Teams wanting full control over their AI setup.
+The setup took me about 30 minutes. Worth it if you're working on anything sensitive.
 
-### 3. Tabby
-A self-hosted AI coding assistant specifically designed for teams:
-- **No cloud dependency** - runs entirely on your infrastructure
-- **Team-focused features** like shared knowledge bases
-- **Enterprise-ready** with SSO and audit logs
+### Tabby - Team Player
+Tabby is built for teams who want to self-host. Think of it like having your own GitHub Copilot that lives on your servers.
 
-**Best for:** Companies with strict data policies.
+I won't lie - there's some setup involved. But if your company needs everything internal, this is probably your best bet.
 
-## How to Choose
+## The Verdict
 
-Consider these factors:
-1. **Privacy needs** - Self-hosted vs cloud
-2. **IDE preference** - Some tools are IDE-specific
-3. **Budget** - Free tiers vs paid plans
-4. **Team size** - Collaboration features matter
+Honestly? I use Cursor for personal projects and Continue when I'm working on something I can't share. Both are solid.
 
-## Conclusion
-
-All three tools represent the cutting edge of AI-assisted development. Try each to see which fits your workflow best.`,
+The "best" one depends entirely on what you need. Try them both - they're free to start.`,
     publishedAt: "2026-02-15",
     author: "AiDex Team",
-    tags: ["AI", "coding", "productivity", "tools", "comparison", "Cursor", "Continue"],
+    tags: ["AI", "coding", "Cursor", "Continue", "productivity"],
     category: "Coding"
   },
   {
     id: "2", 
-    title: "How to Run AI Models Locally: Ollama vs LocalAI",
+    title: "Running AI on Your Own Computer: Ollama vs LocalAI",
     slug: "run-ai-models-locally-ollama-vs-localai",
-    excerpt: "Learn how to run powerful AI models on your own hardware. A practical guide to self-hosted AI with Ollama and LocalAI in 2026.",
-    content: `# How to Run AI Models Locally: Ollama vs LocalAI
+    excerpt: "Tried running AI locally so you don't pay per-request. Here's what worked for me.",
+    content: `Here's the thing about AI APIs - they add up fast. After spending $50 in one month on ChatGPT calls, I decided to figure out local options.
 
-Running AI models locally gives you privacy, control, and eliminates API costs. Let's explore the two most popular options.
+## Ollama - Start Here
 
-## Why Self-Host?
+If you've never run a local AI model, Ollama is the way to go.
 
-- **Privacy** - Your data never leaves your machine
-- **No API costs** - Pay once for hardware, not per-request
-- **Offline capability** - Works without internet
-- **Customization** - Fine-tune models to your needs
+I installed it on my Mac Mini (M1, nothing fancy) and had it running in 5 minutes. No really - 5 minutes.
 
-## Ollama
+The coolest part? I can ask it code questions while on a plane. No WiFi needed.
 
-Ollama makes running local models incredibly simple:
+Is it as smart as GPT-4? Nah. But for quick coding tasks and summarization? More than good enough.
 
-\`\`\`bash
-# Install
-curl -fsSL https://ollama.com/install | sh
+My favorite use: feeding it my messy meeting notes and getting a clean summary.
 
-# Run a model
-ollama run llama2
-\`\`\`
+## LocalAI - The Power User Route
 
-**Pros:**
-- Dead simple setup
-- Great model library
-- Active community
-- Regular updates
+LocalAI is... more. More options, more flexibility, more complexity.
 
-**Cons:**
-- Mac/Linux only (no native Windows)
-- Limited customization
+You can make it behave exactly like the OpenAI API. That means if you have existing code calling OpenAI, you can swap the URL and it just works.
 
-## LocalAI
+It's like the difference between a toaster and a full kitchen. Both make food, but one does a lot more.
 
-LocalAI offers more flexibility:
+## Which Should You Pick?
 
-\`\`\`bash
-# Run with Docker
-docker run -p 8080:8080 quay.io/localai/localai:latest
-\`\`\`
-
-**Pros:**
-- OpenAI-compatible API
-- More customization options
-- Supports more model types
-- Active development
-
-**Cons:**
-- Steeper learning curve
-- More resource intensive
-
-## Which Should You Choose?
-
-| Feature | Ollama | LocalAI |
-|---------|--------|---------|
-| Setup | Easy | Medium |
-| API | Custom | OpenAI-compatible |
-| Models | Limited | Extensive |
-| Best For | Beginners | Advanced users |
-
-## Getting Started Today
-
-Both tools are free and open source. Start with Ollama if you want the quickest path to running local AI. Choose LocalAI if you need API compatibility or advanced features.`,
+Start with Ollama. If you outgrow it, you'll know - and that's when LocalAI makes sense.`,
     publishedAt: "2026-02-10",
     author: "AiDex Team",
-    tags: ["self-hosted", "AI", "ollama", "localAI", "tutorial", "privacy"],
+    tags: ["self-hosted", "AI", "ollama", "localAI", "tutorial"],
     category: "Self-hosted"
   },
   {
     id: "3",
-    title: "Top Free AI Image Generation Tools in 2026",
+    title: "Free AI Image Generators That Don't Suck in 2026",
     slug: "free-ai-image-generation-tools-2026",
-    excerpt: "Discover the best free AI image generation tools. Create stunning visuals without spending a dime in 2026.",
-    content: `# Top Free AI Image Generation Tools in 2026
+    excerpt: "You don't need to pay for Midjourney. Here's what actually works for free.",
+    content: `I was skeptical too. For years I thought "free AI image generation" meant garbage results. Turns out I was wrong.
 
-AI image generation has become accessible to everyone. Here are the best free options:
+## ComfyUI - The Real Deal
 
-## 1. ComfyUI (Open Source)
+This is what the pros use. Yeah, the interface looks like a spaghetti of nodes, but once you get it, you get it.
 
-The most powerful open-source image generation UI:
-- **Complete control** over every generation parameter
-- **Workflow system** for reproducible results
-- **Active community** sharing custom workflows
-- **Runs locally** - your images stay private
+The workflow system is killer. Save your favorite generation setup, tweak it slightly each time, and boom - consistent results.
 
-**Best for:** Users who want maximum control.
+The learning curve is real though. Expect a weekend of frustrated YouTube tutorials before it clicks.
 
-## 2. Stable Diffusion Web UI
+## Stable Diffusion Web UI - The Accessible Option
 
-The classic open-source option:
-- **Easy installation** via one-click installers
-- **Extensive features** for inpainting, outpainting
-- **Large model library** on Civitai
-- **Free hosting** options available
+More user-friendly than ComfyUI. One-click install, browser interface, decent defaults.
 
-**Best for:** Beginners and intermediate users.
+Great for beginners. You'll outgrow it eventually, but it's perfect when you're starting.
 
-## 3. Hugging Face Spaces
+## The Real Talk
 
-Free hosted demos:
-- **No setup required** - just open in browser
-- **Various models** - from Stable Diffusion to SDXL
-- **Great for testing** before self-hosting
-- **Community shared** creations
+These won't replace Midjourney's best work. But for:
+- Blog post images
+- Mockups
+- Concept art
+- Personal projects
 
-**Best for:** Quick experiments.
+They're absolutely good enough. And free.
 
-## Comparison
-
-| Tool | Cost | Setup | Control |
-|------|------|-------|---------|
-| ComfyUI | Free | Medium | Maximum |
-| SD Web UI | Free | Easy | High |
-| HF Spaces | Free | None | Limited |
-
-## Tips for Great Results
-
-1. **Use negative prompts** - Tell AI what you don't want
-2. **Try different samplers** - DPM++ often works well
-3. **Start with good seeds** - Build on successful generations
-4. **Combine tools** - Use upscalers for better quality
-
-## Conclusion
-
-You don't need expensive subscriptions to create amazing AI art. These free tools offer incredible capabilities - you just need to learn how to use them effectively.`,
+My workflow now: Generate with SD, upscale if needed, done.`,
     publishedAt: "2026-02-05",
     author: "AiDex Team",
-    tags: ["AI", "image generation", "free", "design", "Stable Diffusion", "ComfyUI"],
+    tags: ["AI", "image generation", "free", "Stable Diffusion", "ComfyUI"],
     category: "Image Generation"
   },
   {
     id: "4",
-    title: "AI Tools for Productivity: Complete Guide 2026",
+    title: "How I Use AI Every Day for Work (Without Losing My Mind)",
     slug: "ai-tools-for-productivity-guide-2026",
-    excerpt: "Boost your productivity with AI. From Notion to Obsidian, discover tools that help you work smarter in 2026.",
-    content: `# AI Tools for Productivity: Complete Guide 2026
+    excerpt: "Not another "AI will replace us" article. Here's how I actually use these tools to get stuff done.",
+    content: `Here's what nobody talks about: using AI effectively is boring. There's no magic. It's just... practical.
 
-AI can supercharge your productivity. Here's how to leverage it:
+## My Daily AI Stack
 
-## Note-Taking & Knowledge Management
+### Notion AI - For Meeting Notes
+Every meeting ends, I paste notes into Notion, hit the AI button, get a summary. Share with team. Done.
 
-### Notion AI
-Notion's built-in AI helps:
-- **Summarize** long documents instantly
-- **Generate content** from brief prompts
-- **Improve writing** automatically
-- **Answer questions** from your knowledge base
+Before: 20 minutes of formatting
+After: 30 seconds
 
-### Obsidian
-The local-first option with AI plugins:
-- **Local-first** - your notes are truly yours
-- **Plugin ecosystem** - try Summarizer, Copilot
-- **Graph view** - visualize connections between ideas
-- **No cloud** - privacy by design
+### Claude - For the Hard Stuff
+When I have something complex - a strategy document, a tricky email, code architecture - I talk to Claude.
 
-## Automation Tools
+It's like having a smart colleague who's always available and never gets annoyed at stupid questions.
 
-### n8n
-The visual workflow automation with AI:
-- **No-code** automation builder
-- **AI nodes** for LLM processing
-- **Self-host** for data privacy
-- **200+ integrations** including OpenAI
+### n8n - For Things That Repeat
+I set up a workflow that:
+1. Grabs form submissions from my website
+2. Summarizes them with AI
+3. Creates a task in my project manager
+4. Slacks me the summary
 
-**Example use case:**
-- Auto-summarize new emails
-- Generate daily summaries from notes
-- Create content drafts automatically
+Set it up once, forget it forever. That's the dream, and n8n delivers.
 
-## Best Practices
+## The Secret Nobody Tells You
 
-1. **Start with one tool** - Master it before adding more
-2. **Automate repetitive tasks** - AI excels here
-3. **Use AI for drafting** - Not final products
-4. **Maintain human oversight** - Review AI outputs
+The real productivity win isn't the AI itself. It's figuring out which of YOUR tasks are repetitive.
 
-## Recommended Stack
-
-| Purpose | Tool | AI Feature |
-|---------|------|------------|
-| Notes | Notion | Built-in AI |
-| Knowledge | Obsidian | Plugin AI |
-| Automation | n8n | AI nodes |
-| Writing | Claude/GPT | Direct use |
-
-## Conclusion
-
-AI isn't about working less - it's about working smarter. These tools help you focus on what matters while AI handles the repetitive work.`,
+Start there. What's the thing you do three times a week that bores you? That's your AI target.`,
     publishedAt: "2026-02-01",
     author: "AiDex Team",
-    tags: ["AI", "productivity", "tools", "workflow", "automation", "Notion", "Obsidian"],
+    tags: ["AI", "productivity", "tools", "workflow"],
     category: "Productivity"
   },
-  // SCHEDULED - 6 posts
+  // SCHEDULED
   {
     id: "5",
-    title: "Self-Hosted AI: Why You Should Run Your Own",
+    title: "Why I Stopped Sending My Data to OpenAI",
     slug: "self-hosted-ai-why-run-your-own",
-    excerpt: "Thinking about self-hosting AI? Learn the benefits of running AI locally and how to get started in 2026.",
-    content: `# Self-Hosted AI: Why You Should Run Your Own
+    excerpt: "Privacy isn't paranoia. Here's what made me switch to running AI locally.",
+    content: `This isn't a "Big Tech is evil" thing. It's just... I got uncomfortable.
 
-Privacy, control, and cost savings - discover why self-hosting AI is worth considering.
+## The Realization
 
-## The Case for Self-Hosting
+I was pasting client names, internal project details, even the occasional screenshot into ChatGPT. And one day it clicked - I have no idea what happens to this data.
 
-When you use cloud AI services, you're trusting third parties with your data. Self-hosting changes that equation completely.
+That's not a trust issue. That's just bad hygiene.
 
-### Privacy Benefits
-- Your data never leaves your infrastructure
-- No training on your proprietary information
-- Full control over data retention policies
-- GDPR/compliance becomes simpler
+## What Changed
 
-### Cost Analysis
-Cloud AI can get expensive:
-- ChatGPT Plus: $20/month
-- Claude Pro: $20/month  
-- API usage: Variable, can be hundreds monthly
+I set up Ollama on a spare machine. Here's the thing: it's not as good as GPT-4. But it's good enough for 80% of what I was using the cloud for.
 
-Self-hosting once:
-- Good GPU: $500-2000 (one-time)
-- Electricity: ~$20-50/month
-- Your time for setup: Priceless (but finite)
+Code reviews? Local.
+Summarizing internal docs? Local.
+Drafting emails? Local.
 
-## What Can You Run Locally?
+For that other 20% - the genuinely complex stuff - I still use cloud AI. But I think twice now about what goes in.
 
-Modern consumer hardware can run:
-- **Llama variants** - 7B to 70B parameters
-- **Mistral** - Excellent quality/efficiency
-- **Qwen** - Strong multilingual support
-- **Specialized models** - Code, math, summarization
+## The Setup
 
-## Getting Started
+I won't lie, it took some messing around. But honestly? Less than setting up my first home media server.
 
-1. **Hardware check** - GPU helps but isn't required
-2. **Choose your tool** - Ollama for simplicity
-3. **Start small** - 7B models on CPU work
-4. **Scale up** - Add GPU as needed
-
-## Conclusion
-
-Self-hosted AI isn't for everyone, but for privacy-conscious users and businesses, it's a game-changer.`,
+If you're curious, start small. You don't need a GPU farm. An old laptop can run surprisingly decent models.`,
     publishedAt: "",
     scheduledAt: "2026-03-01",
     author: "AiDex Team",
-    tags: ["self-hosted", "AI", "privacy", "tutorial", "ollama"],
+    tags: ["self-hosted", "AI", "privacy", "tutorial"],
     category: "Self-hosted"
   },
   {
     id: "6",
-    title: "Best AI Chatbots Compared: Find Your Perfect AI Companion",
+    title: "ChatGPT vs Claude vs Perplexity: Which One Actually Helps?",
     slug: "best-ai-chatbots-compared",
-    excerpt: "Compare top AI chatbots like Perplexity, Claude, and GPT-4. Find which one fits your needs for research and conversation.",
-    content: `# Best AI Chatbots Compared
+    excerpt: "I use all three daily. Here's the honest breakdown of when to use what.",
+    content: `Here's my unpopular opinion: there is no "best" AI chatbot. They're different tools.
 
-The AI chatbot landscape has exploded. Here's how to find your perfect match.
+## When I Use Each
 
-## Top Contenders
+### Claude - The Thinking Partner
+For anything that requires actual reasoning. Writing a complex doc? Architecting a system? Claude feels like thinking out loud with someone smart.
 
-### Perplexity AI
-The search-focused assistant:
-- **Real-time information** from the web
-- **Cited sources** for every claim
-- **Great for research** workflows
-- **Free tier** available
+What makes it different: it questions your assumptions. Gently, but consistently.
 
-### Claude (Anthropic)
-The thoughtful assistant:
-- **Long context** (200K tokens)
-- **Excellent reasoning** capabilities
-- **Helpful and harmless** design philosophy
-- **Artifacts** for interactive outputs
+### ChatGPT - The Utility Player
+It's the most "normal" AI. Good at most things, great at nothing specific.
 
-### ChatGPT (OpenAI)
-The household name:
-- **First mover** advantage
-- **GPT Store** for custom versions
-- **Voice and vision** capabilities
-- **Strong ecosystem**
+Great for: quick questions, code snippets, "what's the syntax for X"
 
-## Head-to-Head
+### Perplexity - The Researcher
+I use this when I would have used Google.
 
-| Feature | Perplexity | Claude | ChatGPT |
-|---------|------------|--------|---------|
-| Real-time search | ✓ | ✗ | ✗ |
-| Context length | 150K | 200K | 128K |
-| Free tier | ✓ | ✓ | ✓ |
-| Custom GPTs | ✗ | ✗ | ✓ |
+It cites sources. That single feature makes it invaluable for anything where you need to verify information.
 
-## Use Case Recommendations
+## The Honest Comparison
 
-- **Research:** Perplexity
-- **Complex analysis:** Claude  
-- **General assistance:** ChatGPT
-- **Writing help:** Claude
-- **Coding:** All three work well
+| Task | My Choice |
+|------|-----------|
+| Writing something important | Claude |
+| Quick code help | ChatGPT |
+| Learning something new | Perplexity |
+| Brainstorming | Claude |
+| Looking up current info | Perplexity |
 
-## Conclusion
+## The Takeaway
 
-Each chatbot has strengths. Many users find value in using multiple - Perplexity for research, Claude for writing, ChatGPT for general questions.`,
+Having all three isn't wasteful. It's like having a hammer, a screwdriver, and a knife - different tools for different jobs.`,
     publishedAt: "",
     scheduledAt: "2026-03-05",
     author: "AiDex Team",
-    tags: ["AI", "chatbots", "comparison", "research", "Perplexity", "Claude", "ChatGPT"],
+    tags: ["AI", "chatbots", "comparison", "ChatGPT", "Claude", "Perplexity"],
     category: "Chatbots"
   },
   {
     id: "7",
-    title: "Open Source vs Paid AI Tools: What's Worth Your Money?",
+    title: "Are Paid AI Tools Worth It? A Practical Answer",
     slug: "open-source-vs-paid-ai-tools",
-    excerpt: "Should you pay for AI tools or go open source? We break down the pros and cons of each approach in 2026.",
-    content: `# Open Source vs Paid AI Tools
+    excerpt: "I pay for several AI subscriptions. Here's when it makes sense and when it doesn't.",
+    content: `I'll be honest: I was the "free only" guy for a long time. Then I calculated what my time was worth.
 
-The age-old debate continues in the AI age. Here's what you need to know.
+## The Math
 
-## Open Source AI Tools
+Let's say you spend 2 hours a week on something AI could do in 20 minutes.
+That's 1h40m saved × 52 weeks = 86 hours/year.
+If your time is worth $50/hour... that's $4,300 in value.
 
-### Advantages
-- **No subscription costs**
-- **Full customization**
-- **Data stays local**
-- **Community support**
-- **No vendor lock-in**
+Suddenly $20/month doesn't seem crazy.
 
-### Disadvantages
-- **Setup required** - often technical
-- **Self-maintenance** - you're IT department
-- **Hardware costs** - GPU isn't free
-- **Support** - community, not customer service
+## When Free Makes Sense
+- Learning / experimenting
+- Non-work use
+- Privacy-critical projects
+- One-off tasks
 
-## Paid AI Tools
+## When Paid Makes Sense
+- Regular work use
+- Time-sensitive projects  
+- Need the best quality
+- Better support/features
 
-### Advantages
-- **Works out of the box**
-- **Regular updates** and improvements
-- **Customer support**
-- **Cloud infrastructure** handled for you
-- **Features** often more polished
+## My Stack (Paid and Free)
 
-### Disadvantages
-- **Ongoing costs** - adds up quickly
-- **Privacy concerns** - data leaves your control
-- **Limitations** - may restrict usage
-- **Vendor lock-in** - hard to leave
+Paid:
+- ChatGPT Plus - quick stuff
+- Claude Pro - serious writing
 
-## Real-World Examples
+Free:
+- Perplexity - research
+- Ollama - privacy stuff
 
-### Free + Open Source
-- Ollama
-- ComfyUI
-- Stable Diffusion
-- Continue
+## The Bottom Line
 
-### Paid Subscriptions
-- ChatGPT Plus ($20/mo)
-- Claude Pro ($20/mo)
-- Cursor Pro ($20/mo)
-- Midjourney ($10/mo)
-
-## The Hybrid Approach
-
-Many users combine both:
-- **Free tools** for personal/projects
-- **Paid tools** for client work
-- **Open source** for privacy-sensitive tasks
-- **Cloud** for convenience when traveling
-
-## Making Your Decision
-
-Ask yourself:
-1. **Budget** - Can you afford ongoing costs?
-2. **Technical skill** - Comfortable with setup?
-3. **Privacy needs** - Sensitive data?
-4. **Scale** - One user or whole team?
-
-## Conclusion
-
-There's no universal answer. The best choice depends on your specific situation. Many users end up using both.`,
+Don't pay just because. But don't refuse to pay because you're "cheap" either. Calculate your time value. That's the real answer.`,
     publishedAt: "",
     scheduledAt: "2026-03-10",
     author: "AiDex Team",
-    tags: ["open source", "AI", "tools", "pricing", "comparison"],
+    tags: ["open source", "AI", "tools", "pricing"],
     category: "Education"
   },
   {
     id: "8",
-    title: "Getting Started with AI in 2026: A Beginner's Guide",
+    title: "AI for Beginners: What Actually Works",
     slug: "getting-started-ai-2026-beginners",
-    excerpt: "New to AI? This beginner's guide walks you through the best tools and concepts to get started with artificial intelligence.",
-    content: `# Getting Started with AI in 2026: A Beginner's Guide
+    excerpt: "Skip the hype. Here's how to actually use AI without getting overwhelmed.",
+    content: `If you're new to AI, here's what I wish someone told me:
 
-Artificial Intelligence doesn't have to be intimidating. Here's how to start your AI journey.
+## Start Stupid Simple
 
-## What is AI, Really?
+Don't try to revolutionize your workflow. Don't learn all the tools. Don't read every AI newsletter.
 
-At its core, AI is:
-- **Pattern recognition** from data
-- **Prediction** based on examples
-- **Generation** of new content
-- **Classification** of information
+Just... try one thing.
 
-Think of it as a very powerful pattern matcher, not a magical brain.
+## My Recommendation: ChatGPT
 
-## Your First AI Tools
+Sign up. Ask it to help with something small. Aemail. A summary. Some code.
 
-### Start Simple
+That's it. That's how you start.
 
-1. **ChatGPT** - Just talk to it
-2. **Perplexity** - AI-powered search
-3. **Claude** - Thoughtful conversations
+## The One Thing That Matters
 
-All have free tiers. Try them.
+Prompting is a skill. But not in the way the internet thinks.
 
-### Key Concepts
+You don't need fancy prompt engineering. You need to be clear about what you want.
 
-**Prompts** = Instructions you give AI
-- Be clear and specific
-- Give examples when helpful
-- Iterate and refine
+Bad: "Help me with code"
+Good: "Write a Python function that takes a list of numbers and returns the average"
 
-**Tokens** = How AI processes text
-- Roughly 1 token = 1 word
-- Longer inputs = more expensive
-- Context limits exist
+See the difference? That's it. That's the secret.
 
-**Models** = The brain behind AI
-- Different models = different strengths
-- Newer isn't always better
-- Specialized models exist
+## What to Avoid
 
-## Practical First Steps
+Don't:
+- Pay for anything immediately
+- Try to understand how AI "works" before using it
+- Feel bad when AI gets things wrong
+- Share anything sensitive you wouldn't post publicly
 
-### Week 1: Experiment
-- Create free accounts on 2-3 platforms
-- Ask questions, try different prompts
-- Notice what works and doesn't
+Do:
+- Experiment
+- Iterate on your prompts
+- Use it for boring stuff first
 
-### Week 2: Apply
-- Use AI for a real task (emails, summaries)
-- Try one new tool (like image generation)
-- Start building prompts that work for you
+## The Truth
 
-### Week 3: Integrate
-- Add AI to a daily workflow
-- Explore browser extensions
-- Try mobile apps
-
-## Common Mistakes to Avoid
-
-1. **Over-relying** - AI assists, doesn't replace
-2. **Trusting blindly** - Always verify important outputs
-3. **Giving sensitive data** - Be mindful of privacy
-4. **Giving up too early** - Practice improves results
-
-## Resources for Learning
-
-- YouTube tutorials
-- AI tool documentation
-- Reddit communities (r/ArtificialInteligence)
-- Online courses
-
-## Conclusion
-
-AI is a tool like any other - learn it step by step. Start small, be patient, and remember: you don't need to understand everything to use it effectively.`,
+AI isn't magic. It's a tool. And like any tool, you get better at using it by... using it.`,
     publishedAt: "",
     scheduledAt: "2026-03-15",
     author: "AiDex Team",
-    tags: ["AI", "beginner", "tutorial", "guide", "getting started"],
+    tags: ["AI", "beginner", "tutorial", "getting started"],
     category: "Education"
   },
   {
     id: "9",
-    title: "Best AI Voice Tools: TTS and STT Solutions Compared",
+    title: "AI Voice Tools That Don't Sound Like Robots",
     slug: "best-ai-voice-tools-tts-stt",
-    excerpt: "Explore the best AI voice tools for text-to-speech and speech-to-text. From ElevenLabs to Whisper - find your perfect match.",
-    content: `# Best AI Voice Tools: TTS and STT Solutions Compared
+    excerpt: "Tested a bunch of text-to-speech and transcription tools. Here's what doesn't suck.",
+    content: `AI voice stuff used to be a joke. "Talk to me, HAL." Now it's actually useful.
 
-Voice AI has advanced dramatically. Here's the complete guide.
-
-## Text-to-Speech (TTS)
+## Text-to-Speech
 
 ### ElevenLabs
-The leader in realistic voice synthesis:
-- **Emotion control** - Adjust tone and style
-- **Voice cloning** - Create custom voices
-- **Multi-language** - 29+ languages
-- **API access** - For developers
+This is the one everyone talks about. And yeah, it's that good.
 
-**Best for:** Content creators, accessibility
+I generated an audiobook for a blog post. My wife listened to it in the car. Didn't realize it wasn't a real person until I told her.
 
-### OpenAI TTS
-Simple and effective:
-- **Easy to use** - Straightforward API
-- **Good quality** - 6 voice options
-- **Affordable** - Competitive pricing
-- **Reliable** - Backed by OpenAI
+Use for: content creation, accessibility, any audio
 
-**Best for:** Developers needing quick integration
+### The Free Options
+ElevenLabs has a free tier. It's limited but works for testing.
 
-## Speech-to-Text (STT)
+For free permanent use? Honestly, the quality gap is still big enough that I just pay.
 
-### Whisper (OpenAI)
-The open-source standard:
-- **Highly accurate** - Competitive with humans
-- **Multiple languages** - 100+ supported
-- **Runs locally** - Privacy preserved
-- **Free** - Open source
+## Speech-to-Text
 
-**Best for:** Transcription, accessibility
+### Whisper
+OpenAI's Whisper is incredible. And free. And runs locally.
+
+I use it to transcribe meeting recordings. It's better than Zoom's built-in transcription. By a lot.
 
 ### AssemblyAI
-Enterprise-focused:
-- **Advanced features** - Punctuation, formatting
-- **Speaker diarization** - Who's speaking when
-- **Real-time** - Streaming support
-- **Compliance** - HIPAA, SOC2
+If you need something more serious - enterprise stuff, compliance, real-time - this is the play.
 
-**Best for:** Business applications
+## What I Use Daily
 
-## Comparison
+- Whisper for transcription (free, local)
+- ElevenLabs for TTS when needed (free tier)
 
-| Tool | Type | Best Feature | Price |
-|------|------|--------------|-------|
-| ElevenLabs | TTS | Realism | Free tier + paid |
-| OpenAI TTS | TTS | Simplicity | Cheap |
-| Whisper | STT | Accuracy | Free |
-| AssemblyAI | STT | Enterprise | Pay per use |
-
-## Use Cases
-
-**Content Creation:**
-- Voiceovers
-- Audiobooks
-- Podcasts
-
-**Accessibility:**
-- Screen reader alternatives
-- Document narration
-- Language learning
-
-**Business:**
-- Call transcription
-- Meeting notes
-- Customer service
-
-## Getting Started
-
-1. **TTS:** Try ElevenLabs free tier
-2. **STT:** Download Whisper locally
-3. **Both:** Explore APIs for automation
-
-## Conclusion
-
-Voice AI is mature and accessible. Whether you need to create audio content or transcribe existing recordings, there's a tool for every budget and use case.`,
+That's it. Two tools. Cover 95% of voice needs.`,
     publishedAt: "",
     scheduledAt: "2026-03-20",
     author: "AiDex Team",
-    tags: ["AI", "voice", "TTS", "STT", "audio", "ElevenLabs", "Whisper"],
+    tags: ["AI", "voice", "TTS", "STT", "ElevenLabs", "Whisper"],
     category: "Voice"
   },
   {
     id: "10",
-    title: "AI Tools for Developers: The Ultimate Guide",
+    title: "AI Tools I Actually Use as a Developer",
     slug: "ai-tools-for-developers-ultimate-guide",
-    excerpt: "A comprehensive guide to AI tools every developer should know about in 2026. From coding to deployment.",
-    content: `# AI Tools for Developers: The Ultimate Guide
+    excerpt: "Not a list of 100 tools. Just the ones I open every day.",
+    content: `Here's my problem with "best AI tools" articles: they're always 50 tools long. Who has time for that?
 
-Developers have more AI-powered options than ever. Here's your complete guide.
+Here's what I actually use. That's it.
 
-## Coding Assistants
+## Daily Drivers
 
-### IDE Integration
-- **Cursor** - AI-first code editor
-- **Continue** - Open-source extension
-- **GitHub Copilot** - VS Code built-in
-- **Tabby** - Self-hosted option
+### Cursor (or Continue)
+I write code differently now. I start with a comment: "// TODO: build something" and let AI fill it in.
 
-### Capabilities
-- **Autocomplete** - Context-aware suggestions
-- **Chat** - Ask questions about your code
-- **Refactoring** - Improve existing code
-- **Debugging** - Find and fix errors
+Cursor is my editor. It's VS Code under the hood but with AI that actually understands context.
 
-## API & Backend
+### Perplexity
+My new Google. When I need to know "how do I do X in React" - Perplexity, not Google.
 
-### LLM Integration
-- **OpenAI API** - GPT models
-- **Anthropic API** - Claude models
-- **Ollama** - Local models
-- **LocalAI** - Self-hosted OpenAI-compatible
+The citations mean I can verify things.
 
-### Database AI
-- **AI embeddings** for search
-- **Vector databases** - Pinecone, Weaviate
-- **Semantic caching** - Speed + cost savings
+### Claude
+For the hard problems. When I'm architecting something, I think out loud with Claude. It's the best at following complex logic.
 
-## DevOps & Deployment
+## The Occasionals
 
-### CI/CD
-- **GitHub Actions** - AI for PR reviews
-- **GitLab AI** - Code suggestions
-- **CircleCI** - Intelligent caching
+- **Whisper**: Transcribing stuff
+- **ComfyUI**: Random image needs
+- **Ollama**: When I can't send data to the cloud
 
-### Infrastructure
-- **AI-powered monitoring** - Datadog, New Relic
-- **Log analysis** - AI parsing
-- **Incident response** - Automated triage
+## The Point
 
-## Design & UI
+You don't need 20 tools. You need 3-4 that you actually use.
 
-### AI Design Tools
-- **v0** - AI-generated UIs
-- **Galileo** - Design from prompts
-- **Figma AI** - Smart features
-
-### Image Generation
-- **ComfyUI** - Workflow automation
-- **SD Web UI** - Quick prototyping
-- **Midjourney** - High-quality assets
-
-## Productivity
-
-### Documentation
-- **Mintlify** - AI docs
-- **Docusaurus** + AI plugins
-- **GitBook** - Smart search
-
-### Testing
-- **AI test generation** - Various tools
-- **Bug detection** - Code analysis
-- **Property-based testing** - AI generation
-
-## The Complete Stack
-
-| Layer | AI Tool Recommendation |
-|-------|------------------------|
-| Editor | Cursor or Continue |
-| LLM API | OpenAI or Anthropic |
-| Local Dev | Ollama |
-| Documentation | Mintlify |
-| Design | v0 or Midjourney |
-
-## Getting Started
-
-1. **Start with one tool** - Master it first
-2. **Focus on pain points** - Don't add AI for everything
-3. **Measure improvements** - Track time saved
-4. **Iterate** - Add more tools as needed
-
-## Conclusion
-
-AI isn't replacing developers - it's empowering them. The developers who embrace these tools will be significantly more productive than those who don't. Start small, measure results, and keep exploring.`,
+Find what works for you. Ignore the rest.`,
     publishedAt: "",
     scheduledAt: "2026-03-25",
     author: "AiDex Team",
-    tags: ["AI", "developers", "coding", "tools", "guide", "development"],
+    tags: ["AI", "developers", "coding", "tools"],
     category: "Coding"
   }
 ];
