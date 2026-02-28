@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { getPostBySlug, BLOG_POSTS } from '../data/blog';
+import SiteShell from '../components/SiteShell';
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -7,10 +8,12 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">Post Not Found</h1>
-        <Link to="/blog" className="text-cyan-400 hover:underline">← Back to Blog</Link>
-      </div>
+      <SiteShell title="Post Not Found">
+        <div className="text-center py-16">
+          <h1 className="text-2xl font-bold mb-4">Post Not Found</h1>
+          <Link to="/blog" className="text-cyan-400 hover:underline">← Back to Blog</Link>
+        </div>
+      </SiteShell>
     );
   }
 
@@ -22,16 +25,7 @@ export default function BlogPostPage() {
   const isPublished = post.publishedAt !== "";
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 md:py-8">
-      {/* Mobile Nav */}
-      <div className="flex flex-wrap gap-3 mb-6 md:hidden text-sm">
-        <Link to="/" className="text-cyan-400 hover:underline">← Directory</Link>
-        <span className="text-gray-600">|</span>
-        <Link to="/blog" className="text-cyan-400 hover:underline">Blog</Link>
-        <span className="text-gray-600">|</span>
-        <Link to="/leaderboard" className="text-cyan-400 hover:underline">Leaderboard</Link>
-      </div>
-      
+    <SiteShell title={post.title} subtitle={post.excerpt}>
       <article>
         <header className="mb-8">
           <div className="flex flex-wrap gap-2 mb-4">
@@ -58,18 +52,9 @@ export default function BlogPostPage() {
         </header>
 
         <div className="prose prose-lg max-w-none prose-invert">
-          <p className="text-lg text-gray-300 mb-8">{post.excerpt}</p>
           <div className="whitespace-pre-wrap text-gray-300 leading-relaxed">{post.content}</div>
         </div>
       </article>
-
-      {/* Desktop Nav */}
-      <div className="hidden md:flex gap-4 mt-8 pt-8 border-t border-neutral-800">
-        <Link to="/blog" className="text-cyan-400 hover:underline">← Back to Blog</Link>
-        <Link to="/" className="text-cyan-400 hover:underline">Directory</Link>
-        <Link to="/leaderboard" className="text-cyan-400 hover:underline">Leaderboard</Link>
-        <Link to="/compare" className="text-cyan-400 hover:underline">Compare</Link>
-      </div>
 
       {relatedPosts.length > 0 && (
         <section className="mt-12 pt-8 border-t border-neutral-800">
@@ -88,6 +73,6 @@ export default function BlogPostPage() {
           </div>
         </section>
       )}
-    </div>
+    </SiteShell>
   );
 }

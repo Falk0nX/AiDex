@@ -1,24 +1,13 @@
 import { Link } from 'react-router-dom';
 import { getPublishedPosts, getScheduledPosts } from '../data/blog';
+import SiteShell from '../components/SiteShell';
 
 export default function BlogPage() {
   const published = getPublishedPosts();
   const scheduled = getScheduledPosts();
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl md:text-4xl font-bold mb-2">AiDex Blog</h1>
-      <p className="text-gray-400 mb-8">Latest news, guides, and comparisons for AI tools</p>
-      
-      {/* Mobile Nav */}
-      <div className="flex flex-wrap gap-2 mb-8 md:hidden">
-        <Link to="/" className="text-sm text-cyan-400 hover:underline">← Directory</Link>
-        <span className="text-gray-600">|</span>
-        <Link to="/leaderboard" className="text-sm text-cyan-400 hover:underline">Leaderboard</Link>
-        <span className="text-gray-600">|</span>
-        <Link to="/compare" className="text-sm text-cyan-400 hover:underline">Compare</Link>
-      </div>
-      
+    <SiteShell title="AiDex Blog" subtitle="Latest news, guides, and comparisons for AI tools">
       <section className="mb-12">
         <h2 className="text-xl md:text-2xl font-semibold mb-6">Latest Articles</h2>
         <div className="grid gap-6 md:grid-cols-2">
@@ -58,6 +47,6 @@ export default function BlogPage() {
           ))}
         </div>
       </section>
-    </div>
+    </SiteShell>
   );
 }
