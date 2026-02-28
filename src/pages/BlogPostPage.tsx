@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { getPostBySlug, BLOG_POSTS } from '../data/blog';
 import SiteShell from '../components/SiteShell';
+import SEO from '../components/SEO';
 
 function formatContent(content: string) {
   // Split content into paragraphs
@@ -58,6 +59,13 @@ export default function BlogPostPage() {
 
   return (
     <SiteShell title={post.title} subtitle={post.excerpt}>
+      <SEO 
+        title={`${post.title} - AiDex Blog`}
+        description={post.excerpt}
+        image={post.image}
+        url={`https://aidex.online/blog/${post.slug}`}
+        type="article"
+      />
       <article>
         {/* Hero Image */}
         {post.image && (

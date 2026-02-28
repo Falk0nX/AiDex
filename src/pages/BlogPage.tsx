@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { getPublishedPosts, getScheduledPosts } from '../data/blog';
 import SiteShell from '../components/SiteShell';
+import SEO from '../components/SEO';
 
 export default function BlogPage() {
   const published = getPublishedPosts();
@@ -8,6 +9,11 @@ export default function BlogPage() {
 
   return (
     <SiteShell title="AiDex Blog" subtitle="Latest news, guides, and comparisons for AI tools">
+      <SEO 
+        title="AiDex Blog - AI Tools Guides & Comparisons"
+        description="Read expert guides on AI tools including coding assistants, image generators, chatbots, and productivity tools. Updated regularly with honest reviews."
+        url="https://aidex.online/blog"
+      />
       <section className="mb-12">
         <h2 className="text-xl md:text-2xl font-semibold mb-6">Latest Articles</h2>
         <div className="grid gap-6 md:grid-cols-2">
