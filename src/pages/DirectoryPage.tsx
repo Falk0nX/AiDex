@@ -259,6 +259,7 @@ export default function DirectoryPage() {
             <div className="flex flex-wrap items-center gap-2">
               <Link to="/leaderboard" className="gradient-btn"><span>Leaderboard</span></Link>
               <Link to="/compare" className="gradient-btn"><span>Compare</span></Link>
+              <Link to="/blog" className="gradient-btn"><span>Blog</span></Link>
               <button
                 type="button"
                 onClick={() => {
