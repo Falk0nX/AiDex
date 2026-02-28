@@ -19,6 +19,7 @@ export default function SiteShell({ title, subtitle, children }: { title: string
             <Link to="/" className="gradient-btn px-3 py-1.5"><span>Directory</span></Link>
             <Link to="/leaderboard" className="gradient-btn px-3 py-1.5"><span>Leaderboard</span></Link>
             <Link to="/compare" className="gradient-btn px-3 py-1.5"><span>Compare</span></Link>
+            <Link to="/blog" className="gradient-btn px-3 py-1.5"><span>Blog</span></Link>
             <a href="/#submit" className="gradient-btn px-3 py-1.5"><span>Submit</span></a>
           </nav>
         </div>
