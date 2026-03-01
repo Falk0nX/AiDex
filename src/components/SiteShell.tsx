@@ -23,7 +23,7 @@ export default function SiteShell({ title, subtitle, children }: { title: string
             <img src="/aidex-logo-square.jpg" alt="AiDex logo" className="h-10 w-10 rounded-md border border-neutral-800 object-cover" />
             <div>
               <h1 className="text-xl font-semibold tracking-tight hidden md:block" style={{display:"block",color:"white"}}>{title}</h1>
-              {subtitle ? <p className="text-xs text-neutral-400">{subtitle}</p> : null}
+              {subtitle ? <p className="hidden md:block text-xs text-neutral-400">{subtitle}</p> : null}
             </div>
           </Link>
 
