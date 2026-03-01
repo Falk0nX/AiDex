@@ -58,7 +58,7 @@ export default function BlogPostPage() {
   const isPublished = post.publishedAt !== "";
 
   return (
-    <SiteShell title={post.title} subtitle={post.excerpt}>
+    <SiteShell title="AiDex Blog" subtitle={post.excerpt}>
       <SEO 
         title={`${post.title} - AiDex Blog`}
         description={post.excerpt}
