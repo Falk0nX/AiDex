@@ -38,6 +38,7 @@ export default function DirectoryPage() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("All");
@@ -229,7 +230,39 @@ export default function DirectoryPage() {
     <div className="gradient-dot-hero min-h-screen text-neutral-50">
       <header className="site-base border-b border-cyan-900/40 shadow-[0_20px_60px_rgba(2,6,23,0.65)] backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-6">
-          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          {/* Mobile: Logo + Menu Row */}
+          <div className="flex items-center justify-between mb-4 md:hidden">
+            <Link to="/" className="flex items-center gap-3 hover:opacity-90">
+              <img src="/aidex-logo-square.jpg" alt="AiDex logo" className="h-10 w-10 rounded-md border border-neutral-800 object-cover" loading="eager" />
+              <span style={{color: "white", fontSize: "1.25rem", fontWeight: "bold"}}>AiDex</span>
+            </Link>
+            <button
+              className="p-2 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile: Description & Stats */}
+          <div className="md:hidden mb-4">
+            <p className="text-sm text-neutral-300">Discover AI tools, filter by category/pricing, and submit new tools for review.</p>
+            <div className="mt-3 flex flex-wrap gap-2 text-xs text-neutral-300">
+              <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{tools.length} tools</span>
+              <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{categories.length - 1} categories</span>
+              <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">Community curated</span>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden md:flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1 text-xs text-neutral-300">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
@@ -273,6 +306,33 @@ export default function DirectoryPage() {
               </button>
             </div>
           </div>
+
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-4 border-t border-cyan-900/40 py-4">
+              <Link to="/leaderboard" className="block px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium mb-2" onClick={() => setMobileMenuOpen(false)}>
+                Leaderboard
+              </Link>
+              <Link to="/compare" className="block px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium mb-2" onClick={() => setMobileMenuOpen(false)}>
+                Compare
+              </Link>
+              <Link to="/blog" className="block px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium mb-2" onClick={() => setMobileMenuOpen(false)}>
+                Blog
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitStep(1);
+                  setSubmitMessage(null);
+                  setIsSubmitOpen(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg gradient-btn text-center font-medium"
+              >
+                Submit a tool
+              </button>
+            </div>
+          )}
 
           <div className="mt-6 grid gap-3 md:grid-cols-12">
             <div className="md:col-span-5">
