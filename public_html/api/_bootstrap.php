@@ -7,9 +7,22 @@ session_set_cookie_params(['lifetime'=>0,'path'=>'/','domain'=>'','secure'=>$coo
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-require_once '/var/www/aidex-config/db.php';
+$configPaths = [
+  '/var/www/aidex-config/db.php',           // Docker
+  '/var/www/html/aidex-config/db.php',       // Docker alt
+  dirname(__DIR__, 1).'/../aidex-config/db.php', // Local relative
+  dirname(__DIR__, 2).'/aidex-config/db.php',    // AiDex root
+  getenv('HOME').'/aidex-config/db.php',        // Home directory
+];
 
-if (!function_exists('db_connect')) { http_response_code(500); echo json_encode(['ok'=>false,'error'=>'db_connect() missing in config']); exit; }
+foreach ($configPaths as $path) {
+  if (file_exists($path)) {
+    require_once $path;
+    break;
+  }
+}
+
+if (!function_exists('db_connect')) { http_response_code(500); echo json_encode(['ok'=>false,'error'=>'Database config not found']); exit; }
 $pdo = db_connect();
 if (!$pdo instanceof PDO) { http_response_code(500); echo json_encode(['ok'=>false,'error'=>'db_connect() must return PDO']); exit; }
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
