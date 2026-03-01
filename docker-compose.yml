@@ -1,0 +1,9 @@
+services:
+  aidex:
+    image: php:8.2-mysql
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public_html:/var/www/html
+      - ./aidex-config:/var/www/aidex-config
+    restart: unless-stopped
