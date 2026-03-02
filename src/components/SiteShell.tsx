@@ -3,15 +3,13 @@ import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 import BackToTopButton from "./BackToTopButton";
 
-export default function SiteShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
+export default function SiteShell({ title, children }: { title: string; children: ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { to: "/", label: "Directory" },
-    { to: "/leaderboard", label: "Leaderboard" },
-    { to: "/compare", label: "Compare" },
+    { to: "/", label: "Home" },
+    { to: "/openclaw", label: "🦞 OpenClaw" },
     { to: "/blog", label: "Blog" },
-    { to: "/#submit", label: "Submit", external: true },
   ];
 
   return (
@@ -21,24 +19,19 @@ export default function SiteShell({ title, subtitle, children }: { title: string
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 hover:opacity-90 shrink-0">
             <img src="/aidex-logo-square.jpg" alt="AiDex logo" className="h-10 w-10 rounded-md border border-neutral-800 object-cover" />
-            <div>
-              <h1 className="text-xl font-semibold tracking-tight hidden md:block" style={{display:"block",color:"white"}}>{title}</h1>
-              {subtitle ? <p className="hidden md:block text-xs text-neutral-400">{subtitle}</p> : null}
-            </div>
+            <h1 className="text-xl font-semibold tracking-tight" style={{color:"white"}}>{title}</h1>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex flex-wrap gap-2 text-sm">
             {navLinks.map((link) => (
-              link.external ? (
-                <a key={link.label} href={link.to} className="gradient-btn px-3 py-1.5 whitespace-nowrap">
-                  <span>{link.label}</span>
-                </a>
-              ) : (
-                <Link key={link.to} to={link.to} className="gradient-btn px-3 py-1.5 whitespace-nowrap">
-                  <span>{link.label}</span>
-                </Link>
-              )
+              <Link 
+                key={link.to} 
+                to={link.to} 
+                className={`gradient-btn px-3 py-1.5 whitespace-nowrap ${link.to === '/openclaw' ? 'bg-cyan-600 hover:bg-cyan-500' : ''}`}
+              >
+                <span>{link.label}</span>
+              </Link>
             ))}
           </nav>
 
@@ -63,25 +56,14 @@ export default function SiteShell({ title, subtitle, children }: { title: string
           <div className="md:hidden border-t border-cyan-900/40 bg-neutral-900/95 backdrop-blur">
             <nav className="flex flex-col px-4 py-3 gap-2">
               {navLinks.map((link) => (
-                link.external ? (
-                  <a
-                    key={link.label}
-                    href={link.to}
-                    className="px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className="px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                )
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`px-4 py-3 rounded-lg text-center font-medium ${link.to === '/openclaw' ? 'bg-cyan-600 text-white' : 'bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700'}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
               ))}
             </nav>
           </div>

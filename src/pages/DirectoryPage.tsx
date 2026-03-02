@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { apiGet, apiPost } from "../lib/api";
 import { getAiDexScore } from "../lib/scoring";
-import BackToTopButton from "../components/BackToTopButton";
+import SiteShell from "../components/SiteShell";
 
 type Pricing = "Free" | "Paid" | "Freemium" | "Open Source";
 
@@ -38,7 +38,6 @@ export default function DirectoryPage() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("All");
@@ -227,72 +226,33 @@ export default function DirectoryPage() {
   };
 
   return (
-    <div className="gradient-dot-hero min-h-screen text-neutral-50">
-      <header className="site-base border-b border-cyan-900/40 shadow-[0_20px_60px_rgba(2,6,23,0.65)] backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 py-6">
-          {/* Mobile: Logo + Menu Row */}
-          <div className="flex items-center justify-between mb-4 md:hidden">
-            <Link to="/" className="flex items-center gap-3 hover:opacity-90">
-              <img src="/aidex-logo-square.jpg" alt="AiDex logo" className="h-10 w-10 rounded-md border border-neutral-800 object-cover" loading="eager" />
-              <span style={{color: "white", fontSize: "1.25rem", fontWeight: "bold"}}>AiDex</span>
-            </Link>
-            <button
-              className="p-2 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {mobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
+    <SiteShell title="AiDex">
+      {flashMessage && (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-emerald-700/40 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-200">
+          <span>{flashMessage}</span>
+          <button type="button" onClick={() => setFlashMessage(null)} className="rounded-md border border-emerald-700/40 px-2 py-1 text-xs hover:bg-emerald-900/40">Dismiss</button>
+        </div>
+      )}
+
+      {/* Page Title & Stats */}
+      <div className="bg-slate-900/40 border-b border-neutral-800/50 -mx-4 px-4 -mt-8 mb-6">
+        <div className="px-4 py-6 max-w-6xl mx-auto">
+          <div className="text-sm text-neutral-300 mb-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />Curated AI Tools Directory
+            </span>
           </div>
-
-          {/* Mobile: Description & Stats */}
-          <div className="md:hidden mb-4">
-            <p className="text-sm text-neutral-300">Discover AI tools, filter by category/pricing, and submit new tools for review.</p>
-            <div className="mt-3 flex flex-wrap gap-2 text-xs text-neutral-300">
-              <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{tools.length} tools</span>
-              <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{categories.length - 1} categories</span>
-              <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">Community curated</span>
-            </div>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-semibold tracking-tight">AiDex</h1>
           </div>
-
-          {/* Desktop Layout */}
-          <div className="hidden md:flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-neutral-800 px-3 py-1 text-xs text-neutral-300">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                Curated AI Tools Directory
-              </div>
-              <div className="mt-3 flex items-center gap-3">
-                <Link to="/" className="flex items-center gap-3 hover:opacity-90">
-                  <img
-                    src="/aidex-logo-square.jpg"
-                    alt="AiDex logo"
-                    className="h-10 w-10 rounded-md border border-neutral-800 object-cover"
-                    loading="eager"
-                  />
-                  <h1 className="text-3xl font-semibold tracking-tight">AiDex</h1>
-                </Link>
-              </div>
-              <p className="mt-2 max-w-2xl text-sm text-neutral-300">
-                Discover AI tools, filter by category/pricing, and submit new tools for review.
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2 text-xs text-neutral-300">
-                <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{tools.length} tools</span>
-                <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{categories.length - 1} categories</span>
-                <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">Community curated</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Link to="/leaderboard" className="gradient-btn"><span>Leaderboard</span></Link>
-              <Link to="/compare" className="gradient-btn"><span>Compare</span></Link>
-              <Link to="/blog" className="gradient-btn"><span>Blog</span></Link>
+          <p className="text-sm text-neutral-300 mb-3">Discover AI tools, filter by category/pricing, and submit new tools for review.</p>
+          <div className="flex flex-wrap gap-2 text-xs text-neutral-300 mb-4">
+            <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{tools.length} tools</span>
+            <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">{categories.length - 1} categories</span>
+            <span className="rounded-full border border-neutral-700 bg-neutral-900/80 px-3 py-1">Community curated</span>
+            <div className="ml-auto flex gap-2">
+              <a href="/leaderboard" className="px-3 py-1.5 rounded-lg border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-cyan-600 text-white font-medium text-xs">Leaderboard</a>
+              <a href="/compare" className="px-3 py-1.5 rounded-lg border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 hover:border-cyan-600 text-white font-medium text-xs">Compare</a>
               <button
                 type="button"
                 onClick={() => {
@@ -300,401 +260,352 @@ export default function DirectoryPage() {
                   setSubmitMessage(null);
                   setIsSubmitOpen(true);
                 }}
-                className="gradient-btn"
-              >
-                <span>Submit a tool</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="md:hidden mt-4 border-t border-cyan-900/40 py-4">
-              <Link to="/leaderboard" className="block px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium mb-2" onClick={() => setMobileMenuOpen(false)}>
-                Leaderboard
-              </Link>
-              <Link to="/compare" className="block px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium mb-2" onClick={() => setMobileMenuOpen(false)}>
-                Compare
-              </Link>
-              <Link to="/blog" className="block px-4 py-3 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700 text-center font-medium mb-2" onClick={() => setMobileMenuOpen(false)}>
-                Blog
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  setSubmitStep(1);
-                  setSubmitMessage(null);
-                  setIsSubmitOpen(true);
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full px-4 py-3 rounded-lg gradient-btn text-center font-medium"
+                className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-medium text-xs"
               >
                 Submit a tool
               </button>
             </div>
-          )}
+          </div>
+        </div>
 
-          <div className="mt-6 grid gap-3 md:grid-cols-12">
-            <div className="md:col-span-5">
-              <label className="text-xs text-neutral-200">Search</label>
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search tools, tags, keywords…"
-                className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none placeholder:text-neutral-500 focus:border-neutral-600"
-              />
-            </div>
-
-            <div className="md:col-span-3">
-              <label className="text-xs text-neutral-200">Category</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              >
-                {categories.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="text-xs text-neutral-200">Pricing</label>
-              <select
-                value={pricing}
-                onChange={(e) => setPricing(e.target.value as any)}
-                className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              >
-                <option value="All">All</option>
-                <option value="Free">Free</option>
-                <option value="Freemium">Freemium</option>
-                <option value="Paid">Paid</option>
-                <option value="Open Source">Open Source</option>
-              </select>
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="text-xs text-neutral-200">Sort</label>
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as any)}
-                className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-              >
-                <option value="newest">Newest</option>
-                <option value="name">Name</option>
-                <option value="score">AiDex Score</option>
-              </select>
-            </div>
-
-            <div className="md:col-span-12 flex items-center justify-between gap-3">
-              <label className="inline-flex items-center gap-2 text-sm text-neutral-300">
+        {/* Search & Filters */}
+        <div className="px-4 pb-4 max-w-6xl mx-auto">
+          <div id="submit-tool" className="rounded-xl border border-neutral-800 bg-slate-900/60 p-4">
+            <div className="grid gap-3 md:grid-cols-12">
+              <div className="md:col-span-5">
+                <label className="text-xs text-neutral-200">Search</label>
                 <input
-                  type="checkbox"
-                  checked={openSourceOnly}
-                  onChange={(e) => setOpenSourceOnly(e.target.checked)}
-                  className="h-4 w-4 rounded border-neutral-700 bg-neutral-900"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search tools, tags, keywords…"
+                  className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none placeholder:text-neutral-500 focus:border-neutral-600"
                 />
-                Open-source only
-              </label>
+              </div>
 
-              <div className="text-xs text-neutral-200">
-                Showing <span className="text-neutral-200">{Math.min(page * pageSize, filtered.length)}</span>{" "}
-                of <span className="text-neutral-200">{filtered.length}</span> tool
-                {filtered.length === 1 ? "" : "s"}
+              <div className="md:col-span-3">
+                <label className="text-xs text-neutral-200">Category</label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                >
+                  {categories.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="text-xs text-neutral-200">Pricing</label>
+                <select
+                  value={pricing}
+                  onChange={(e) => setPricing(e.target.value as any)}
+                  className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                >
+                  <option value="All">All</option>
+                  <option value="Free">Free</option>
+                  <option value="Freemium">Freemium</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Open Source">Open Source</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="text-xs text-neutral-200">Sort</label>
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as any)}
+                  className="mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                >
+                  <option value="newest">Newest</option>
+                  <option value="name">Name</option>
+                  <option value="score">AiDex Score</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-12 flex items-center justify-between gap-3">
+                <label className="inline-flex items-center gap-2 text-sm text-neutral-300">
+                  <input
+                    type="checkbox"
+                    checked={openSourceOnly}
+                    onChange={(e) => setOpenSourceOnly(e.target.checked)}
+                    className="h-4 w-4 rounded border-neutral-700 bg-neutral-900"
+                  />
+                  Open-source only
+                </label>
+
+                <div className="text-xs text-neutral-200">
+                  Showing <span className="text-neutral-200">{Math.min(page * pageSize, filtered.length)}</span>{" "}
+                  of <span className="text-neutral-200">{filtered.length}</span> tool
+                  {filtered.length === 1 ? "" : "s"}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        {flashMessage && (
-          <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-emerald-700/40 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-200">
-            <span>{flashMessage}</span>
-            <button type="button" onClick={() => setFlashMessage(null)} className="rounded-md border border-emerald-700/40 px-2 py-1 text-xs hover:bg-emerald-900/40">Dismiss</button>
-          </div>
-        )}
-        {loading && <p className="text-sm text-neutral-400">Loading tools…</p>}
-        {error && <p className="mb-4 text-sm text-red-300">{error}</p>}
+      {loading && <p className="text-sm text-neutral-400">Loading tools…</p>}
+      {error && <p className="mb-4 text-sm text-red-300">{error}</p>}
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {paged.map((t) => {
-            const tagsList = (t.tags || "")
-              .split(",")
-              .map((x) => x.trim())
-              .filter(Boolean);
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {paged.map((t) => {
+          const tagsList = (t.tags || "")
+            .split(",")
+            .map((x) => x.trim())
+            .filter(Boolean);
 
-            return (
-              <article
-                key={t.id}
-                onClick={() => navigate(`/tool/${t.id}`)}
-                onMouseMove={(e) => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-                  e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
-                }}
-                className="glow-card cursor-pointer"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-start gap-3">
-                    <img
-                      src={faviconFromUrl(t.website_url)}
-                      alt=""
-                      className="mt-0.5 h-9 w-9 rounded-md border border-neutral-700 bg-neutral-800 p-1"
-                      loading="lazy"
-                    />
-                    <div>
-                      <h2 className="text-base font-semibold">{t.name}</h2>
-                      <p className="mt-1 text-sm text-neutral-300 line-clamp-3">{t.description}</p>
-                    </div>
+          return (
+            <article
+              key={t.id}
+              onClick={() => navigate(`/tool/${t.id}`)}
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+              }}
+              className="glow-card cursor-pointer"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <img
+                    src={faviconFromUrl(t.website_url)}
+                    alt=""
+                    className="mt-0.5 h-9 w-9 rounded-md border border-neutral-700 bg-neutral-800 p-1"
+                    loading="lazy"
+                  />
+                  <div>
+                    <h2 className="text-base font-semibold">{t.name}</h2>
+                    <p className="mt-1 text-sm text-neutral-300 line-clamp-3">{t.description}</p>
                   </div>
+                </div>
+                <span
+                  className={classNames(
+                    "shrink-0 rounded-[9px] border px-2 py-1 text-xs",
+                    t.pricing === "Free" && "border-emerald-700/50 text-emerald-300",
+                    t.pricing === "Paid" && "border-amber-700/50 text-amber-300",
+                    t.pricing === "Freemium" && "border-sky-700/50 text-sky-300",
+                    t.pricing === "Open Source" && "border-fuchsia-700/50 text-fuchsia-300"
+                  )}
+                >
+                  {t.pricing}
+                </span>
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-[9px] border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-300">
+                  {t.category}
+                </span>
+                {tagsList.slice(0, 3).map((tag) => (
                   <span
-                    className={classNames(
-                      "shrink-0 rounded-[9px] border px-2 py-1 text-xs",
-                      t.pricing === "Free" && "border-emerald-700/50 text-emerald-300",
-                      t.pricing === "Paid" && "border-amber-700/50 text-amber-300",
-                      t.pricing === "Freemium" && "border-sky-700/50 text-sky-300",
-                      t.pricing === "Open Source" && "border-fuchsia-700/50 text-fuchsia-300"
-                    )}
+                    key={tag}
+                    className="rounded-[9px] border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-400"
                   >
-                    {t.pricing}
+                    #{tag}
                   </span>
-                </div>
+                ))}
+              </div>
 
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <span className="rounded-[9px] border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-300">
-                    {t.category}
-                  </span>
-                  {tagsList.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-[9px] border border-neutral-800 bg-neutral-950 px-2 py-1 text-xs text-neutral-400"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-xs text-neutral-500">
+                  Added {new Date(t.date_added).toLocaleDateString()}
+                </span>
+                <span className="rounded-[9px] border border-cyan-900/70 bg-cyan-950/40 px-2 py-1 text-[11px] text-cyan-300">
+                  Score {getAiDexScore(t)}
+                </span>
+              </div>
 
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-xs text-neutral-500">
-                    Added {new Date(t.date_added).toLocaleDateString()}
-                  </span>
-                  <span className="rounded-[9px] border border-cyan-900/70 bg-cyan-950/40 px-2 py-1 text-[11px] text-cyan-300">
-                    Score {getAiDexScore(t)}
-                  </span>
-                </div>
-
-                <div className="mt-3 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
-                  <button
-                    type="button"
-                    onClick={() => onVote(t.id, "up")}
-                    className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500"
-                  >
-                    👍 {t.upvotes ?? 0}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onVote(t.id, "down")}
-                    className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-rose-500"
-                  >
-                    👎 {t.downvotes ?? 0}
-                  </button>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-        <div className="mt-8 flex items-center justify-between">
-          <button
-            className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm disabled:opacity-50"
-            disabled={page <= 1}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-          >
-            ← Prev
-          </button>
-
-          <div className="text-sm text-neutral-300">
-            Page <span className="font-semibold text-white">{page}</span> of{" "}
-            <span className="font-semibold text-white">{totalPages}</span>
-          </div>
-
-          <button
-            className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm disabled:opacity-50"
-            disabled={page >= totalPages}
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-          >
-            Next →
-          </button>
-        </div>
-
-        <section className="mt-12 rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-          <h3 className="text-lg font-semibold">About AiDex</h3>
-          <p className="mt-1 text-sm text-neutral-300">
-            AiDex is a curated AI tools directory for discovering chat assistants, image generation platforms,
-            voice AI, coding tools, and foundation models. Browse by category, pricing, and open-source status
-            to quickly find the right tool for your workflow.
-          </p>
-        </section>
-
-        {isSubmitOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-            <div className="w-full max-w-2xl rounded-2xl border border-neutral-800 bg-neutral-950 p-6 shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
-              <div className="mb-4 flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="text-lg font-semibold">Submit a tool</h3>
-                  <p className="mt-1 text-sm text-neutral-300">Submissions go into a review queue (admin approval).</p>
-                </div>
+              <div className="mt-3 flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
                 <button
                   type="button"
-                  onClick={() => {
-                    setSubmitStep(1);
-                    setIsSubmitOpen(false);
-                  }}
-                  className="rounded-lg border border-neutral-700 px-2.5 py-1.5 text-sm text-neutral-200 hover:border-neutral-500"
+                  onClick={() => onVote(t.id, "up")}
+                  className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500"
                 >
-                  ✕
+                  👍 {t.upvotes ?? 0}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onVote(t.id, "down")}
+                  className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-rose-500"
+                >
+                  👎 {t.downvotes ?? 0}
                 </button>
               </div>
+            </article>
+          );
+        })}
+      </div>
 
-              <form className="grid gap-3 md:grid-cols-3" onSubmit={onSubmit}>
-                <div className="md:col-span-3 mb-1 text-xs text-neutral-400">
-                  Step {submitStep} of 2
-                </div>
+      <div className="mt-8 flex items-center justify-between">
+        <button
+          className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm disabled:opacity-50"
+          disabled={page <= 1}
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+        >
+          ← Prev
+        </button>
 
-                {submitStep === 1 ? (
-                  <>
-                    <input
-                      value={websiteUrl}
-                      onChange={(e) => setWebsiteUrl(e.target.value)}
-                      className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                      placeholder="https://tool-website.com"
-                      required
-                    />
-                    <div className="md:col-span-3 flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSubmitStep(1);
-                          setIsSubmitOpen(false);
-                        }}
-                        className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        disabled={autofillState === "loading"}
-                        onClick={onAutofillFromWebsite}
-                        className="gradient-btn disabled:opacity-50"
-                      >
-                        <span>{autofillState === "loading" ? "Auto-filling…" : "Next"}</span>
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                      placeholder="Tool name"
-                      required
-                    />
-                    <input
-                      value={websiteUrl}
-                      onChange={(e) => setWebsiteUrl(e.target.value)}
-                      className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                      placeholder="Website URL"
-                      required
-                    />
-                    <select
-                      value={submitPricing}
-                      onChange={(e) => setSubmitPricing(e.target.value as Pricing)}
-                      className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                    >
-                      <option>Free</option>
-                      <option>Freemium</option>
-                      <option>Paid</option>
-                      <option>Open Source</option>
-                    </select>
-                    <select
-                      value={submitCategory}
-                      onChange={(e) => setSubmitCategory(e.target.value)}
-                      className="md:col-span-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                    >
-                      {submitCategoryOptions.map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                      ))}
-                      <option value="Other">Other</option>
-                    </select>
-                    <input
-                      value={customCategory}
-                      onChange={(e) => setCustomCategory(e.target.value)}
-                      className="md:col-span-1 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600 disabled:opacity-50"
-                      placeholder="New category"
-                      disabled={submitCategory !== "Other"}
-                      required={submitCategory === "Other"}
-                    />
-                    <input
-                      value={tags}
-                      onChange={(e) => setTags(e.target.value)}
-                      className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                      placeholder="Tags (comma-separated)"
-                    />
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
-                      placeholder="Short description"
-                      rows={3}
-                      required
-                    />
-                    <div className="md:col-span-3 flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setSubmitStep(1)}
-                        className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
-                      >
-                        Back
-                      </button>
-                      <button
-                        disabled={submitState === "sending"}
-                        className="gradient-btn disabled:opacity-50"
-                      >
-                        <span>{submitState === "sending" ? "Submitting…" : "Submit for review"}</span>
-                      </button>
-                    </div>
-                  </>
-                )}
-              </form>
-
-              {submitMessage && <p className="mt-3 text-sm text-neutral-300">{submitMessage}</p>}
-            </div>
-          </div>
-        )}
-      </main>
-
-      <footer className="border-t border-neutral-800">
-        <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-neutral-500">
-          <p>© {new Date().getFullYear()} AiDex · v0.1.3</p>
-          <p className="mt-1">
-            Open-source curated AI tools directory. Repo: 
-            <a
-              href="https://github.com/Falk0nX/AiDex"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-300 underline decoration-neutral-700 hover:decoration-neutral-300"
-            >
-              github.com/Falk0nX/AiDex
-            </a>
-          </p>
+        <div className="text-sm text-neutral-300">
+          Page <span className="font-semibold text-white">{page}</span> of{" "}
+          <span className="font-semibold text-white">{totalPages}</span>
         </div>
-      </footer>
 
-      <BackToTopButton />
-    </div>
+        <button
+          className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm disabled:opacity-50"
+          disabled={page >= totalPages}
+          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+        >
+          Next →
+        </button>
+      </div>
+
+      <section className="mt-12 rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+        <h3 className="text-lg font-semibold">About AiDex</h3>
+        <p className="mt-1 text-sm text-neutral-300">
+          AiDex is a curated AI tools directory for discovering chat assistants, image generation platforms,
+          voice AI, coding tools, and foundation models. Browse by category, pricing, and open-source status
+          to quickly find the right tool for your workflow.
+        </p>
+      </section>
+
+      {isSubmitOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="w-full max-w-2xl rounded-2xl border border-neutral-800 bg-neutral-950 p-6 shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-semibold">Submit a tool</h3>
+                <p className="mt-1 text-sm text-neutral-300">Submissions go into a review queue (admin approval).</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitStep(1);
+                  setIsSubmitOpen(false);
+                }}
+                className="rounded-lg border border-neutral-700 px-2.5 py-1.5 text-sm text-neutral-200 hover:border-neutral-500"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form className="grid gap-3 md:grid-cols-3" onSubmit={onSubmit}>
+              <div className="md:col-span-3 mb-1 text-xs text-neutral-400">
+                Step {submitStep} of 2
+              </div>
+
+              {submitStep === 1 ? (
+                <>
+                  <input
+                    value={websiteUrl}
+                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                    className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                    placeholder="https://tool-website.com"
+                    required
+                  />
+                  <div className="md:col-span-3 flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubmitStep(1);
+                        setIsSubmitOpen(false);
+                      }}
+                      className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      disabled={autofillState === "loading"}
+                      onClick={onAutofillFromWebsite}
+                      className="gradient-btn disabled:opacity-50"
+                    >
+                      <span>{autofillState === "loading" ? "Auto-filling…" : "Next"}</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                    placeholder="Tool name"
+                    required
+                  />
+                  <input
+                    value={websiteUrl}
+                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                    className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                    placeholder="Website URL"
+                    required
+                  />
+                  <select
+                    value={submitPricing}
+                    onChange={(e) => setSubmitPricing(e.target.value as Pricing)}
+                    className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                  >
+                    <option>Free</option>
+                    <option>Freemium</option>
+                    <option>Paid</option>
+                    <option>Open Source</option>
+                  </select>
+                  <select
+                    value={submitCategory}
+                    onChange={(e) => setSubmitCategory(e.target.value)}
+                    className="md:col-span-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                  >
+                    {submitCategoryOptions.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                    <option value="Other">Other</option>
+                  </select>
+                  <input
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                    className="md:col-span-1 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600 disabled:opacity-50"
+                    placeholder="New category"
+                    disabled={submitCategory !== "Other"}
+                    required={submitCategory === "Other"}
+                  />
+                  <input
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                    className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                    placeholder="Tags (comma-separated)"
+                  />
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="md:col-span-3 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-neutral-600"
+                    placeholder="Short description"
+                    rows={3}
+                    required
+                  />
+                  <div className="md:col-span-3 flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSubmitStep(1)}
+                      className="rounded-lg border border-neutral-700 px-4 py-2 text-sm font-medium text-neutral-200 hover:border-neutral-500"
+                    >
+                      Back
+                    </button>
+                    <button
+                      disabled={submitState === "sending"}
+                      className="gradient-btn disabled:opacity-50"
+                    >
+                      <span>{submitState === "sending" ? "Submitting…" : "Submit for review"}</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </form>
+
+            {submitMessage && <p className="mt-3 text-sm text-neutral-300">{submitMessage}</p>}
+          </div>
+        </div>
+      )}
+    </SiteShell>
   );
 }

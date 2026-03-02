@@ -7,6 +7,7 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import ComparePage from './pages/ComparePage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
+import OpenClawPage from './pages/OpenClawPage';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/compare" element={<ComparePage />} />
       <Route path="/blog" element={<BlogPage />} />
       <Route path="/blog/:slug" element={<BlogPostPage />} />
+      <Route path="/openclaw" element={<OpenClawPage />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route path="/admin" element={<AdminDashboardPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
