@@ -67,6 +67,7 @@ export default function OpenClawPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [votes, setVotes] = useState<Record<string, { up: number; down: number }>>({});
+  const [userVotes, setUserVotes] = useState<Record<string, "up" | "down">>({});
 
   // Fetch votes from API on load
   useEffect(() => {
@@ -85,23 +86,28 @@ export default function OpenClawPage() {
   }, []);
 
   const handleVote = async (itemName: string, type: "up" | "down") => {
-    // Optimistic update - update UI immediately
-    setVotes(prev => ({
-      ...prev,
-      [itemName]: { 
-        up: (prev[itemName]?.up || 0) + (type === "up" ? 1 : 0), 
-        down: (prev[itemName]?.down || 0) + (type === "down" ? 1 : 0) 
-      }
-    }));
-    
+    // Don't allow voting same direction twice
+    if (userVotes[itemName] === type) return;
+
     try {
-      await fetch("/api/vote_openclaw.php", {
+      const res = await fetch("/api/vote_openclaw.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ item: itemName, vote: type }),
       });
+      const data = await res.json();
+      
+      if (data.ok) {
+        // Update with authoritative counts from server
+        setVotes(prev => ({
+          ...prev,
+          [itemName]: { up: data.upvotes, down: data.downvotes }
+        }));
+        // Track user's vote
+        setUserVotes(prev => ({ ...prev, [itemName]: type }));
+      }
     } catch {
-      // Silent fail - vote already applied optimistically
+      // Silent fail
     }
   };
 
@@ -199,14 +205,14 @@ export default function OpenClawPage() {
                         <button
                           type="button"
                           onClick={(e) => { e.preventDefault(); handleVote(item.name, "up"); }}
-                          className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500"
+                          className={`rounded-[9px] border px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500 ${userVotes[item.name] === "up" ? "border-emerald-500 bg-emerald-500/20" : "border-neutral-700"}`}
                         >
                           👍 {itemVotes.up}
                         </button>
                         <button
                           type="button"
                           onClick={(e) => { e.preventDefault(); handleVote(item.name, "down"); }}
-                          className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-rose-500"
+                          className={`rounded-[9px] border px-2 py-1 text-xs text-neutral-200 hover:border-rose-500 ${userVotes[item.name] === "down" ? "border-rose-500 bg-rose-500/20" : "border-neutral-700"}`}
                         >
                           👎 {itemVotes.down}
                         </button>
@@ -238,14 +244,14 @@ export default function OpenClawPage() {
                         <button
                           type="button"
                           onClick={() => handleVote(item.name, "up")}
-                          className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500"
+                          className={`rounded-[9px] border px-2 py-1 text-xs text-neutral-200 hover:border-emerald-500 ${userVotes[item.name] === "up" ? "border-emerald-500 bg-emerald-500/20" : "border-neutral-700"}`}
                         >
                           👍 {itemVotes.up}
                         </button>
                         <button
                           type="button"
                           onClick={() => handleVote(item.name, "down")}
-                          className="rounded-[9px] border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-rose-500"
+                          className={`rounded-[9px] border px-2 py-1 text-xs text-neutral-200 hover:border-rose-500 ${userVotes[item.name] === "down" ? "border-rose-500 bg-rose-500/20" : "border-neutral-700"}`}
                         >
                           👎 {itemVotes.down}
                         </button>
