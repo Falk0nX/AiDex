@@ -8,7 +8,7 @@ export default function BlogPage() {
   const scheduled = getScheduledPosts();
 
   return (
-    <SiteShell title="AiDex Blog" subtitle="Latest news, guides, and comparisons for AI tools">
+    <SiteShell title="AiDex Blog">
       <SEO 
         title="AiDex Blog - AI Tools Guides & Comparisons"
         description="Read expert guides on AI tools including coding assistants, image generators, chatbots, and productivity tools. Updated regularly with honest reviews."

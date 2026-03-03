@@ -30,7 +30,7 @@ export default function LeaderboardPage() {
   const newest = useMemo(() => [...tools].sort((a, b) => +new Date(b.date_added) - +new Date(a.date_added)).slice(0, 20), [tools]);
 
   return (
-    <SiteShell title="AiDex Leaderboard" subtitle="Trending tools, fresh launches, and momentum at a glance.">
+    <SiteShell title="AiDex Leaderboard">
       <div className="grid gap-6 md:grid-cols-2">
         <section className="rounded-2xl border border-neutral-800 bg-neutral-900/85 p-5">
           <h2 className="text-lg font-semibold">🔥 Trending by AiDex Score</h2>

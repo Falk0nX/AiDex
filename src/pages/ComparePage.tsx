@@ -72,7 +72,7 @@ export default function ComparePage() {
   const upB = b?.upvotes ?? 0;
 
   return (
-    <SiteShell title="Compare AI Tools" subtitle="Detailed side-by-side comparison with stronger visual cards.">
+    <SiteShell title="Compare AI Tools">
       <div className="rounded-2xl border border-neutral-800 bg-neutral-900/85 p-5">
         <div className="grid gap-3 md:grid-cols-2">
           <select

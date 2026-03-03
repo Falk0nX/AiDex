@@ -84,11 +84,11 @@ export default function ToolPage() {
 
   const tagsList = useMemo(() => (tool?.tags || "").split(",").map((x) => x.trim()).filter(Boolean), [tool]);
 
-  if (loading) return <SiteShell title="Loading tool..." subtitle="Fetching tool details"><p className="text-sm text-neutral-400">Loading…</p></SiteShell>;
-  if (error || !tool) return <SiteShell title="Tool not found" subtitle="This listing may have moved or been removed."><p className="text-sm text-red-300">{error || "Not found"}</p></SiteShell>;
+  if (loading) return <SiteShell title="Loading tool..."><p className="text-sm text-neutral-400">Loading…</p></SiteShell>;
+  if (error || !tool) return <SiteShell title="Tool not found"><p className="text-sm text-red-300">{error || "Not found"}</p></SiteShell>;
 
   return (
-    <SiteShell title={tool.name} subtitle="Tool profile on AiDex">
+    <SiteShell title={tool.name}>
       <article className="rounded-2xl border border-neutral-800 bg-neutral-900/85 p-6">
         <p className="text-neutral-300">{tool.description}</p>
 
